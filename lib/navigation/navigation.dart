@@ -1,6 +1,5 @@
+import 'package:finances_flutter/navigation/navigation_item.dart';
 import 'package:flutter/material.dart';
-
-import 'navigation_item.dart';
 
 class Navigation extends StatefulWidget {
   final List<NavigationItem> navigationItems;
@@ -18,12 +17,9 @@ class _NavigationState extends State<Navigation> {
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    ColoredBox mainArea = ColoredBox(
-      color: colorScheme.surfaceVariant,
-      child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 200),
-        child: widget.navigationItems[_currentPageIndex].page,
-      ),
+    AnimatedSwitcher mainArea = AnimatedSwitcher(
+      duration: Duration(milliseconds: 200),
+      child: widget.navigationItems[_currentPageIndex].page,
     );
 
     return LayoutBuilder(
@@ -32,7 +28,6 @@ class _NavigationState extends State<Navigation> {
           // NavigationBar for thin devices
           return Scaffold(
             bottomNavigationBar: NavigationBar(
-              backgroundColor: colorScheme.background,
               destinations: widget.navigationItems
                   .map((item) => item.buildNavigationBarDestination())
                   .toList(),
@@ -42,7 +37,6 @@ class _NavigationState extends State<Navigation> {
                 });
               },
               selectedIndex: _currentPageIndex,
-              surfaceTintColor: Colors.transparent, // removes default color
             ),
             body: mainArea,
           );
@@ -53,7 +47,12 @@ class _NavigationState extends State<Navigation> {
               children: [
                 SafeArea(
                   child: NavigationRail(
-                    backgroundColor: colorScheme.background,
+                    // set the elevation to match the NavigationBar elevation
+                    backgroundColor: ElevationOverlay.colorWithOverlay(
+                      colorScheme.surface,
+                      colorScheme.primary,
+                      3.0,
+                    ),
                     destinations: widget.navigationItems
                         .map((item) => item.buildNavigationRailDestination())
                         .toList(),
