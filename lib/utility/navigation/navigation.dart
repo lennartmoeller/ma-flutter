@@ -1,4 +1,4 @@
-import 'package:finances_flutter/navigation/navigation_item.dart';
+import 'package:finances_flutter/utility/navigation/navigation_item.dart';
 import 'package:flutter/material.dart';
 
 class Navigation extends StatefulWidget {

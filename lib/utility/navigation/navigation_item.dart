@@ -6,11 +6,12 @@ class NavigationItem {
   final IconData selectedIcon;
   final String label;
 
-  const NavigationItem(
-      {required this.page,
-      required this.unselectedIcon,
-      required this.selectedIcon,
-      required this.label});
+  const NavigationItem({
+    required this.page,
+    required this.unselectedIcon,
+    required this.selectedIcon,
+    required this.label,
+  });
 
   NavigationDestination buildNavigationBarDestination() {
     return NavigationDestination(
