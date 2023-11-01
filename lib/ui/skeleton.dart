@@ -104,7 +104,7 @@ class _SkeletonState extends State<Skeleton> {
                 Header(title: widget.navigationItems[_currentPageIndex].label),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: widget.navigationItems[_currentPageIndex].page,
                   ),
                 )
