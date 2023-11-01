@@ -1,3 +1,4 @@
+import 'package:finances_flutter/model/account.dart';
 import 'package:finances_flutter/model/category.dart';
 import 'package:finances_flutter/model/transaction.dart';
 import 'package:finances_flutter/pages/accounts.dart';
@@ -8,8 +9,6 @@ import 'package:finances_flutter/utility/http/http_helper.dart';
 import 'package:finances_flutter/utility/navigation/navigation.dart';
 import 'package:finances_flutter/utility/navigation/navigation_item.dart';
 import 'package:flutter/material.dart';
-
-import 'model/account.dart';
 
 void main() async {
   // avoids errors caused by flutter upgrade

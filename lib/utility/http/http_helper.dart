@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class HttpHelper {
   // TODO: Move to config file in future
-  static String baseUrl = 'http://localhost/api/masters-thesis';
+  static String baseUrl = 'https://ma.espressoapp.de/api/masters-thesis';
 
   static Future<Map<String, dynamic>> get(String resource) async {
     try {

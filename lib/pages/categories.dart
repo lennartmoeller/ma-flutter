@@ -22,26 +22,32 @@ class _CategoriesPageState extends State<CategoriesPage> {
     return Center(
       child: FutureBuilder<Map<int, Category>>(
         future: futureAccounts,
-        builder:
-            (BuildContext context, AsyncSnapshot<Map<int, Category>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<Map<int, Category>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text(
-                'Kategorien konnten nicht geladen werden: ${snapshot.error}');
           } else if (snapshot.hasData) {
-            return ListView(
-              children: snapshot.data!.entries.map((entry) {
-                return ListTile(
-                  title: Text(entry.value.label),
-                );
-              }).toList(),
-            );
+            return categoriesList(snapshot.data!);
           } else {
             return Text('Kategorien konnten nicht geladen werden');
           }
         },
       ),
+    );
+  }
+
+  Widget categoriesList(Map<int, Category> categories) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return ListView(
+      children: categories.values.map((category) {
+        return ListTile(
+          title: Text(category.label),
+          leading: Icon(Icons.favorite),
+          shape: Border(
+            bottom: BorderSide(color: colorScheme.outline),
+          ),
+        );
+      }).toList(),
     );
   }
 }

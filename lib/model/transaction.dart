@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finances_flutter/utility/database/database_helper.dart';
 import 'package:finances_flutter/utility/database/row.dart';
-import 'package:finances_flutter/utility/extensions/date_time_extension.dart';
+import 'package:finances_flutter/utility/german_date.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Transaction extends Row {
@@ -11,10 +11,10 @@ class Transaction extends Row {
 
   @override
   int id;
-  DateTime date;
+  GermanDate date;
   int account;
   int category;
-  String description;
+  String? description;
   int amount;
 
   Transaction({
@@ -35,7 +35,7 @@ class Transaction extends Row {
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
       id: json['id'] as int,
-      date: DateTime.parse(json['date'] as String),
+      date: GermanDate(json['date'] as String),
       account: json['account'] as int,
       category: json['category'] as int,
       description: json['description'] as String,
@@ -47,7 +47,7 @@ class Transaction extends Row {
   Map<String, Object?> toJson() {
     return {
       'id': id,
-      'date': date.toDateString(),
+      'date': date.toString(),
       'account': account,
       'category': category,
       'description': description,

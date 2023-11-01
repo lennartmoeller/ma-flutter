@@ -22,26 +22,30 @@ class _AccountsPageState extends State<AccountsPage> {
     return Center(
       child: FutureBuilder<Map<int, Account>>(
         future: futureAccounts,
-        builder:
-            (BuildContext context, AsyncSnapshot<Map<int, Account>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<Map<int, Account>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text(
-                'Konten konnten nicht geladen werden: ${snapshot.error}');
           } else if (snapshot.hasData) {
-            return ListView(
-              children: snapshot.data!.entries.map((entry) {
-                return ListTile(
-                  title: Text(entry.value.label),
-                );
-              }).toList(),
-            );
+            return accountsList(snapshot.data!);
           } else {
             return Text('Konten konnten nicht geladen werden');
           }
         },
       ),
+    );
+  }
+
+  Widget accountsList(Map<int, Account> accounts) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return ListView(
+      children: accounts.values.map((account) {
+        return ListTile(
+          title: Text(account.label),
+          shape: Border(
+            bottom: BorderSide(color: colorScheme.outline),
+          ),
+        );
+      }).toList(),
     );
   }
 }
