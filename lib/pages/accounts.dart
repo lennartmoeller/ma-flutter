@@ -1,4 +1,4 @@
-import 'package:finances_flutter/model/account.dart';
+import 'package:ma_flutter/model/account.dart';
 import 'package:flutter/material.dart';
 
 class AccountsPage extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-import 'package:finances_flutter/model/account.dart';
-import 'package:finances_flutter/model/category.dart';
-import 'package:finances_flutter/model/transaction.dart';
-import 'package:finances_flutter/utility/german_date.dart';
-import 'package:finances_flutter/utility/money.dart';
+import 'package:ma_flutter/model/account.dart';
+import 'package:ma_flutter/model/category.dart';
+import 'package:ma_flutter/model/transaction.dart';
+import 'package:ma_flutter/utility/german_date.dart';
+import 'package:ma_flutter/utility/money.dart';
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 

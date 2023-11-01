@@ -1,5 +1,5 @@
-name: finances_flutter
-description: A personal finance app written in Flutter.
+name: ma_flutter
+description: A new Flutter project.
 publish_to: 'none'
 version: 0.0.1+1
 environment:

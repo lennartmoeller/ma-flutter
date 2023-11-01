@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:finances_flutter/utility/database/database_helper.dart';
-import 'package:finances_flutter/utility/database/row.dart';
-import 'package:finances_flutter/utility/german_date.dart';
+import 'package:ma_flutter/utility/database/database_helper.dart';
+import 'package:ma_flutter/utility/database/row.dart';
+import 'package:ma_flutter/utility/german_date.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Transaction extends Row {

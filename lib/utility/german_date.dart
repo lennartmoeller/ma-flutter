@@ -1,4 +1,4 @@
-import 'package:finances_flutter/utility/utility.dart';
+import 'package:ma_flutter/utility/utility.dart';
 
 class GermanDate {
   late final DateTime _dateTime;

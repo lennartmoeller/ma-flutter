@@ -1,4 +1,4 @@
-import 'package:finances_flutter/model/category.dart';
+import 'package:ma_flutter/model/category.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesPage extends StatefulWidget {

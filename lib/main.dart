@@ -1,13 +1,13 @@
-import 'package:finances_flutter/model/account.dart';
-import 'package:finances_flutter/model/category.dart';
-import 'package:finances_flutter/model/transaction.dart';
-import 'package:finances_flutter/pages/accounts.dart';
-import 'package:finances_flutter/pages/categories.dart';
-import 'package:finances_flutter/pages/transactions.dart';
-import 'package:finances_flutter/theme/color_schemes.dart';
-import 'package:finances_flutter/utility/http/http_helper.dart';
-import 'package:finances_flutter/utility/navigation/navigation.dart';
-import 'package:finances_flutter/utility/navigation/navigation_item.dart';
+import 'package:ma_flutter/model/account.dart';
+import 'package:ma_flutter/model/category.dart';
+import 'package:ma_flutter/model/transaction.dart';
+import 'package:ma_flutter/pages/accounts.dart';
+import 'package:ma_flutter/pages/categories.dart';
+import 'package:ma_flutter/pages/transactions.dart';
+import 'package:ma_flutter/theme/color_schemes.dart';
+import 'package:ma_flutter/utility/http/http_helper.dart';
+import 'package:ma_flutter/utility/navigation/navigation.dart';
+import 'package:ma_flutter/utility/navigation/navigation_item.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
