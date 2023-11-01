@@ -1,5 +1,5 @@
-import 'package:ma_flutter/model/category.dart';
 import 'package:flutter/material.dart';
+import 'package:ma_flutter/model/category.dart';
 
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
@@ -43,9 +43,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
         return ListTile(
           title: Text(category.label),
           leading: Icon(Icons.favorite),
-          shape: Border(
-            bottom: BorderSide(color: colorScheme.outline),
-          ),
         );
       }).toList(),
     );

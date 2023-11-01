@@ -1,14 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
-import 'package:ma_flutter/pages/accounts.dart';
-import 'package:ma_flutter/pages/categories.dart';
-import 'package:ma_flutter/pages/transactions.dart';
+import 'package:ma_flutter/pages/accounts_page.dart';
+import 'package:ma_flutter/pages/categories_page.dart';
+import 'package:ma_flutter/pages/transactions_page.dart';
 import 'package:ma_flutter/theme/color_schemes.dart';
-import 'package:ma_flutter/utility/http/http_helper.dart';
-import 'package:ma_flutter/utility/navigation/navigation.dart';
-import 'package:ma_flutter/utility/navigation/navigation_item.dart';
-import 'package:flutter/material.dart';
+import 'package:ma_flutter/ui/navigation_item.dart';
+import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/utility/http_helper.dart';
 
 void main() async {
   // avoids errors caused by flutter upgrade
@@ -40,26 +40,26 @@ class FinanceApp extends StatelessWidget {
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       themeMode: ThemeMode.light,
       // DEBUG: light and dark theme
-      home: const Navigation(
+      home: const Skeleton(
         navigationItems: [
           NavigationItem(
+            page: TransactionsPage(),
+            unselectedIcon: Icons.payments_outlined,
+            selectedIcon: Icons.payments,
+            label: 'Transaktionen',
+          ),
+          NavigationItem(
             page: CategoriesPage(),
-            unselectedIcon: Icons.check_outlined,
-            selectedIcon: Icons.check,
+            unselectedIcon: Icons.category_outlined,
+            selectedIcon: Icons.category,
             label: 'Kategorien',
           ),
           NavigationItem(
             page: AccountsPage(),
-            unselectedIcon: Icons.check_outlined,
-            selectedIcon: Icons.check,
+            unselectedIcon: Icons.account_balance_outlined,
+            selectedIcon: Icons.account_balance,
             label: 'Konten',
           ),
-          NavigationItem(
-            page: TransactionsPage(),
-            unselectedIcon: Icons.check_outlined,
-            selectedIcon: Icons.check,
-            label: 'Transaktionen',
-          )
         ],
       ),
     );

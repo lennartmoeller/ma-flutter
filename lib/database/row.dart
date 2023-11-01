@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ma_flutter/utility/database/database_helper.dart';
+import 'package:ma_flutter/database/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class Row {

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:ma_flutter/utility/database/database_helper.dart';
-import 'package:ma_flutter/utility/database/row.dart';
+import 'package:ma_flutter/database/database_helper.dart';
+import 'package:ma_flutter/database/row.dart';
 import 'package:ma_flutter/utility/german_date.dart';
 import 'package:sqflite/sqflite.dart';
 

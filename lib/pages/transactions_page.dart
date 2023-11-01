@@ -1,11 +1,11 @@
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
 import 'package:ma_flutter/utility/german_date.dart';
 import 'package:ma_flutter/utility/money.dart';
-import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class TransactionsPage extends StatefulWidget {
@@ -71,9 +71,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
             Text(Money.format(transaction.amount))
           ],
         ),
-        shape: Border(
-          bottom: BorderSide(color: colorScheme.outline),
-        ),
       );
       // group by date
       if (transactionsGrouped.containsKey(date)) {
@@ -92,24 +89,25 @@ class _TransactionsPageState extends State<TransactionsPage> {
         List<ListTile> transactions = transactionsGrouped[date]!;
         return StickyHeader(
           header: Container(
-            width: double.infinity,
             decoration: BoxDecoration(
-              color: ElevationOverlay.colorWithOverlay(
-                colorScheme.surface,
-                colorScheme.primary,
-                3.0,
-              ),
               border: Border(
-                bottom: BorderSide(color: colorScheme.outline),
+                bottom: BorderSide(color: colorScheme.outline.withOpacity(.3)),
               ),
+              color: colorScheme.surface,
             ),
-            padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+            width: double.infinity,
             child: Text(
               GermanDate(date).beautifyDate(),
               style: textTheme.bodyMedium,
             ),
           ),
-          content: Column(children: transactions),
+          content: Column(
+            children: [
+              ...transactions,
+              Container(height: 8.0),
+            ],
+          ),
         );
       },
     );

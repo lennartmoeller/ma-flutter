@@ -1,5 +1,5 @@
-import 'package:ma_flutter/model/account.dart';
 import 'package:flutter/material.dart';
+import 'package:ma_flutter/model/account.dart';
 
 class AccountsPage extends StatefulWidget {
   const AccountsPage({super.key});
@@ -41,9 +41,6 @@ class _AccountsPageState extends State<AccountsPage> {
       children: accounts.values.map((account) {
         return ListTile(
           title: Text(account.label),
-          shape: Border(
-            bottom: BorderSide(color: colorScheme.outline),
-          ),
         );
       }).toList(),
     );
