@@ -36,9 +36,10 @@ class _AccountsPageState extends State<AccountsPage> {
   }
 
   Widget accountsList(Map<int, Account> accounts) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    List<Account> accountList = accounts.values.toList();
+    accountList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(
-      children: accounts.values.map((account) {
+      children: accountList.map((account) {
         return ListTile(
           title: Text(account.label),
         );

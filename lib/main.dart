@@ -38,9 +38,9 @@ class FinanceApp extends StatelessWidget {
       title: 'Haushaltsbuch',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      // TODO: Remove this after debugging
       themeMode: ThemeMode.light,
-      // DEBUG: light and dark theme
-      home: const Skeleton(
+      home: Skeleton(
         navigationItems: [
           NavigationItem(
             page: TransactionsPage(),

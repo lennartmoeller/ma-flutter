@@ -36,10 +36,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
   }
 
   Widget categoriesList(Map<int, Category> categories) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    TextTheme textTheme = Theme.of(context).textTheme;
+    List<Category> categoryList = categories.values.toList();
+    categoryList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(
-      children: categories.values.map((category) {
+      children: categoryList.map((category) {
         return ListTile(
           title: Text(category.label),
           leading: Icon(Icons.favorite),
