@@ -1,9 +1,11 @@
 import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
+import 'package:ma_flutter/ui/level_divider.dart';
 import 'package:ma_flutter/utility/german_date.dart';
 import 'package:ma_flutter/utility/money.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -54,59 +56,65 @@ class _TransactionsPageState extends State<TransactionsPage> {
       Map<int, Transaction> transactions) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
-    Map<String, List<ListTile>> transactionsGrouped = {};
-    for (Transaction transaction in transactions.values) {
-      String date = transaction.date.toString();
-      var listTile = ListTile(
-        title: Text(categories[transaction.category]!.label),
-        leading: Icon(Icons.favorite),
-        subtitle: transaction.description != null && transaction.description!.isNotEmpty
-            ? Text(transaction.description!)
-            : null,
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(accounts[transaction.account]!.label),
-            Text(Money.format(transaction.amount))
-          ],
-        ),
-      );
-      // group by date
-      if (transactionsGrouped.containsKey(date)) {
-        transactionsGrouped[date]!.add(listTile);
-      } else {
-        transactionsGrouped[date] = [listTile];
-      }
-    }
-    // sort by date
-    transactionsGrouped = SplayTreeMap.from(transactionsGrouped, (a, b) => a.compareTo(b));
+
+    // group transactions by date, then sort groups by date
+    var groupedTransactions = SplayTreeMap.from(
+        groupBy<Transaction, String>(transactions.values, (t) => t.date.toString()));
 
     return ListView.builder(
-      itemCount: transactionsGrouped.length,
+      itemCount: groupedTransactions.length,
       itemBuilder: (BuildContext context, int index) {
-        String date = transactionsGrouped.keys.elementAt(index);
-        List<ListTile> transactions = transactionsGrouped[date]!;
+        String date = groupedTransactions.keys.elementAt(index);
+        List<Transaction> transactions = groupedTransactions[date]!;
         return StickyHeader(
           header: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: colorScheme.outline.withOpacity(.3)),
-              ),
-              color: colorScheme.surface,
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+            color: colorScheme.surface,
             width: double.infinity,
-            child: Text(
-              GermanDate(date).beautifyDate(),
-              style: textTheme.bodyMedium,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                  child: Text(
+                    GermanDate(date).beautifyDate(),
+                    style: textTheme.bodyMedium,
+                  ),
+                ),
+                LevelDivider(level: 0),
+              ],
             ),
           ),
           content: Column(
-            children: [
-              ...transactions,
-              Container(height: 8.0),
-            ],
+            children: transactions
+                .mapIndexed(
+                  (index, transaction) {
+                    return [
+                      Container(
+                        height: 64, // size of ListTile with title and subtitle
+                        alignment: Alignment.center,
+                        child: ListTile(
+                          title: Text(categories[transaction.category]!.label),
+                          leading: Icon(Icons.favorite),
+                          subtitle:
+                              transaction.description != null && transaction.description!.isNotEmpty
+                                  ? Text(transaction.description!)
+                                  : null,
+                          trailing: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(accounts[transaction.account]!.label),
+                              Text(Money.format(transaction.amount))
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (index < transactions.length - 1) LevelDivider(level: 1),
+                    ];
+                  },
+                )
+                .expand((widgetList) => widgetList)
+                .toList(),
           ),
         );
       },

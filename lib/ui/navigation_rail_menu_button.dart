@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/header.dart';
+import 'package:ma_flutter/ui/skeleton.dart';
 
 class NavigationRailMenuButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -15,7 +15,7 @@ class NavigationRailMenuButton extends StatelessWidget {
       animation: animation,
       builder: (BuildContext context, Widget? child) {
         return Container(
-          height: Header.headerHeight - 16.0,
+          height: Skeleton.headerHeight - 16.0,
           padding: EdgeInsets.only(right: lerpDouble(0, 140, animation.value)!),
           child: Center(
             child: IconButton(

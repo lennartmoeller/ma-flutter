@@ -5,9 +5,9 @@ import 'package:ma_flutter/model/transaction.dart';
 import 'package:ma_flutter/pages/accounts_page.dart';
 import 'package:ma_flutter/pages/categories_page.dart';
 import 'package:ma_flutter/pages/transactions_page.dart';
-import 'package:ma_flutter/theme/color_schemes.dart';
 import 'package:ma_flutter/ui/navigation_item.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/ui/theme/color_schemes.dart';
 import 'package:ma_flutter/utility/http_helper.dart';
 
 void main() async {

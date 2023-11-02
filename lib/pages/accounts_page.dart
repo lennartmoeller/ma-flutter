@@ -1,5 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
+import 'package:ma_flutter/ui/level_divider.dart';
 
 class AccountsPage extends StatefulWidget {
   const AccountsPage({super.key});
@@ -39,11 +41,18 @@ class _AccountsPageState extends State<AccountsPage> {
     List<Account> accountList = accounts.values.toList();
     accountList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(
-      children: accountList.map((account) {
-        return ListTile(
-          title: Text(account.label),
-        );
-      }).toList(),
+      children: accountList
+          .mapIndexed((index, account) {
+            return [
+              ListTile(
+                title: Text(account.label),
+                leading: Icon(Icons.favorite),
+              ),
+              if (index < accounts.length - 1) LevelDivider(level: 1),
+            ];
+          })
+          .expand((widgetList) => widgetList)
+          .toList(),
     );
   }
 }

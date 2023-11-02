@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/header.dart';
 import 'package:ma_flutter/ui/navigation_item.dart';
 import 'package:ma_flutter/ui/navigation_rail_menu_button.dart';
 
 class Skeleton extends StatefulWidget {
+  static const double headerHeight = 100.0;
+
   final List<NavigationItem> navigationItems;
 
   const Skeleton({super.key, required this.navigationItems});
@@ -51,16 +52,14 @@ class _SkeletonState extends State<Skeleton> {
       ),
       body: Column(
         children: [
-          Header(
+          _getHeader(
             leading: IconButton(
               icon: Icon(Icons.menu),
               onPressed: _openSettings,
             ),
             title: widget.navigationItems[_currentPageIndex].label,
           ),
-          Expanded(
-            child: widget.navigationItems[_currentPageIndex].page
-          )
+          Expanded(child: widget.navigationItems[_currentPageIndex].page)
         ],
       ),
     );
@@ -101,7 +100,7 @@ class _SkeletonState extends State<Skeleton> {
           child: Scaffold(
             body: Column(
               children: [
-                Header(title: widget.navigationItems[_currentPageIndex].label),
+                _getHeader(title: widget.navigationItems[_currentPageIndex].label),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -113,6 +112,47 @@ class _SkeletonState extends State<Skeleton> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _getHeader({Widget? leading, String? title, String? subtitle, Widget? trailing}) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
+
+    const padding = (Skeleton.headerHeight - 52.0) / 4;
+
+    return Container(
+      color: colorScheme.surface,
+      width: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.all(padding),
+        child: Row(
+          children: [
+            if (leading != null) leading,
+            Expanded(
+              child: SizedBox(
+                height: 52,
+                child: Padding(
+                  padding: EdgeInsets.only(left: padding),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (title != null) Text(title, style: textTheme.titleLarge),
+                      if (subtitle != null)
+                        Text(
+                          subtitle,
+                          style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.normal),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            if (trailing != null) trailing,
+          ],
+        ),
+      ),
     );
   }
 
