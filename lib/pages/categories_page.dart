@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/category.dart';
+import 'package:ma_flutter/ui/font_awesome_icon.dart';
 import 'package:ma_flutter/ui/level_divider.dart';
+import 'package:ma_flutter/ui/skeleton.dart';
 
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
@@ -41,12 +43,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
     List<Category> categoryList = categories.values.toList();
     categoryList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(
+      padding: EdgeInsets.only(bottom: Skeleton.pageBottomPadding),
       children: categoryList
           .mapIndexed((index, category) {
             return [
               ListTile(
                 title: Text(category.label),
-                leading: Icon(Icons.favorite),
+                leading: FontAwesomeIcon(name: category.icon),
               ),
               if (index < categories.length - 1) LevelDivider(level: 1),
             ];

@@ -12,11 +12,13 @@ class Account extends Row {
   int id;
   String label;
   int startBalance;
+  String? icon;
 
   Account({
     required this.id,
     required this.label,
     required this.startBalance,
+    required this.icon,
   });
 
   static Future<Map<int, Account>> getAll() async {
@@ -30,6 +32,7 @@ class Account extends Row {
       id: json['id'] as int,
       label: json['label'] as String,
       startBalance: json['start_balance'] as int,
+      icon: json['icon'] as String?,
     );
   }
 
@@ -39,6 +42,7 @@ class Account extends Row {
       'id': id,
       'label': label,
       'start_balance': startBalance,
+      'icon': icon,
     };
   }
 }

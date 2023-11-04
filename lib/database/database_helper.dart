@@ -15,13 +15,13 @@ class DatabaseHelper {
       join(await getDatabasesPath(), "finance.db"),
       onCreate: (db, version) async {
         await db.execute(
-          'CREATE TABLE accounts(id INTEGER PRIMARY KEY, label TEXT, start_balance INTEGER)',
+          'CREATE TABLE accounts(id INTEGER PRIMARY KEY, label TEXT NOT NULL, start_balance INTEGER NOT NULL DEFAULT 0, icon TEXT)',
         );
         await db.execute(
-          'CREATE TABLE categories(id INTEGER PRIMARY KEY, label TEXT, type INTEGER)',
+          'CREATE TABLE categories(id INTEGER PRIMARY KEY, label TEXT NOT NULL, type INTEGER NOT NULL DEFAULT 2, icon TEXT)',
         );
         await db.execute(
-          'CREATE TABLE transactions(id INTEGER PRIMARY KEY, date TEXT, account INTEGER, category INTEGER, description TEXT, amount INTEGER)',
+          'CREATE TABLE transactions(id INTEGER PRIMARY KEY, date TEXT NOT NULL, account INTEGER NOT NULL, category INTEGER NOT NULL, description TEXT, amount INTEGER NOT NULL)',
         );
       },
       version: 1,

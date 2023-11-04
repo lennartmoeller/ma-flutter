@@ -44,20 +44,17 @@ class FinanceApp extends StatelessWidget {
         navigationItems: [
           NavigationItem(
             page: TransactionsPage(),
-            unselectedIcon: Icons.payments_outlined,
-            selectedIcon: Icons.payments,
+            icon: "money-bills",
             label: 'Transaktionen',
           ),
           NavigationItem(
             page: CategoriesPage(),
-            unselectedIcon: Icons.category_outlined,
-            selectedIcon: Icons.category,
+            icon: "icons",
             label: 'Kategorien',
           ),
           NavigationItem(
             page: AccountsPage(),
-            unselectedIcon: Icons.account_balance_outlined,
-            selectedIcon: Icons.account_balance,
+            icon: "building-columns",
             label: 'Konten',
           ),
         ],

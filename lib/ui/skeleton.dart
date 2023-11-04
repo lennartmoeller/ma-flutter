@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ma_flutter/ui/font_awesome_icon.dart';
 import 'package:ma_flutter/ui/navigation_item.dart';
 import 'package:ma_flutter/ui/navigation_rail_menu_button.dart';
 
 class Skeleton extends StatefulWidget {
   static const double headerHeight = 100.0;
+  static const double pageBottomPadding = 14.0;
 
   final List<NavigationItem> navigationItems;
 
@@ -54,7 +56,7 @@ class _SkeletonState extends State<Skeleton> {
         children: [
           _getHeader(
             leading: IconButton(
-              icon: Icon(Icons.menu),
+              icon: FontAwesomeIcon(name: "bars"),
               onPressed: _openSettings,
             ),
             title: widget.navigationItems[_currentPageIndex].label,
@@ -123,29 +125,27 @@ class _SkeletonState extends State<Skeleton> {
 
     return Container(
       color: colorScheme.surface,
+      height: Skeleton.headerHeight,
       width: double.infinity,
       child: Padding(
-        padding: EdgeInsets.all(padding),
+        padding: EdgeInsets.symmetric(horizontal: padding),
         child: Row(
           children: [
             if (leading != null) leading,
             Expanded(
-              child: SizedBox(
-                height: 52,
-                child: Padding(
-                  padding: EdgeInsets.only(left: padding),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (title != null) Text(title, style: textTheme.titleLarge),
-                      if (subtitle != null)
-                        Text(
-                          subtitle,
-                          style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.normal),
-                        ),
-                    ],
-                  ),
+              child: Padding(
+                padding: EdgeInsets.only(left: padding),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (title != null) Text(title, style: textTheme.titleLarge),
+                    if (subtitle != null)
+                      Text(
+                        subtitle,
+                        style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.normal),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -159,11 +159,12 @@ class _SkeletonState extends State<Skeleton> {
   List<NavigationDestination> _getNavigationBarDestinations() {
     return widget.navigationItems.map((item) {
       return NavigationDestination(
-        icon: Icon(
-          item.unselectedIcon,
-          color: _colorScheme.onSurface.withOpacity(_navItemUnselectedOpacity),
+        icon: FontAwesomeIcon(
+          name: item.icon,
+          opacity: _navItemUnselectedOpacity,
+          style: Style.regular,
         ),
-        selectedIcon: Icon(item.selectedIcon),
+        selectedIcon: FontAwesomeIcon(name: item.icon, style: Style.solid),
         label: item.label,
       );
     }).toList();
@@ -172,8 +173,8 @@ class _SkeletonState extends State<Skeleton> {
   List<NavigationRailDestination> _getNavigationRailDestinations() {
     return widget.navigationItems.map((item) {
       return NavigationRailDestination(
-        icon: Icon(item.unselectedIcon),
-        selectedIcon: Icon(item.selectedIcon),
+        icon: FontAwesomeIcon(name: item.icon, style: Style.regular),
+        selectedIcon: FontAwesomeIcon(name: item.icon, style: Style.solid),
         label: Text(item.label),
       );
     }).toList();

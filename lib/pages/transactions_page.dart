@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
+import 'package:ma_flutter/ui/font_awesome_icon.dart';
 import 'package:ma_flutter/ui/level_divider.dart';
+import 'package:ma_flutter/ui/skeleton.dart';
 import 'package:ma_flutter/utility/german_date.dart';
 import 'package:ma_flutter/utility/money.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -62,6 +64,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
         groupBy<Transaction, String>(transactions.values, (t) => t.date.toString()));
 
     return ListView.builder(
+      padding: EdgeInsets.only(bottom: Skeleton.pageBottomPadding),
       itemCount: groupedTransactions.length,
       itemBuilder: (BuildContext context, int index) {
         String date = groupedTransactions.keys.elementAt(index);
@@ -88,13 +91,15 @@ class _TransactionsPageState extends State<TransactionsPage> {
             children: transactions
                 .mapIndexed(
                   (index, transaction) {
+                    Account account = accounts[transaction.account]!;
+                    Category category = categories[transaction.category]!;
                     return [
                       Container(
                         height: 64, // size of ListTile with title and subtitle
                         alignment: Alignment.center,
                         child: ListTile(
-                          title: Text(categories[transaction.category]!.label),
-                          leading: Icon(Icons.favorite),
+                          title: Text(category.label),
+                          leading: FontAwesomeIcon(name: category.icon),
                           subtitle:
                               transaction.description != null && transaction.description!.isNotEmpty
                                   ? Text(transaction.description!)
@@ -102,10 +107,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           trailing: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(accounts[transaction.account]!.label),
-                              Text(Money.format(transaction.amount))
-                            ],
+                            children: [Text(account.label), Text(Money.format(transaction.amount))],
                           ),
                         ),
                       ),

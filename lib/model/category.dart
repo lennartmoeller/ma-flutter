@@ -12,11 +12,13 @@ class Category extends Row {
   int id;
   String label;
   int type;
+  String? icon;
 
   Category({
     required this.id,
     required this.label,
     required this.type,
+    required this.icon,
   });
 
   static Future<Map<int, Category>> getAll() async {
@@ -30,6 +32,7 @@ class Category extends Row {
       id: json['id'] as int,
       label: json['label'] as String,
       type: json['type'] as int,
+      icon: json['icon'] as String?,
     );
   }
 
@@ -39,6 +42,7 @@ class Category extends Row {
       'id': id,
       'label': label,
       'type': type,
+      'icon': icon,
     };
   }
 }
