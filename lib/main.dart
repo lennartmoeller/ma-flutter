@@ -5,7 +5,6 @@ import 'package:ma_flutter/model/transaction.dart';
 import 'package:ma_flutter/pages/accounts_page.dart';
 import 'package:ma_flutter/pages/categories_page.dart';
 import 'package:ma_flutter/pages/transactions_page.dart';
-import 'package:ma_flutter/ui/navigation_item.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
 import 'package:ma_flutter/ui/theme/color_schemes.dart';
 import 'package:ma_flutter/utility/http_helper.dart';
@@ -40,25 +39,11 @@ class FinanceApp extends StatelessWidget {
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       // TODO: Remove this after debugging
       themeMode: ThemeMode.light,
-      home: Skeleton(
-        navigationItems: [
-          NavigationItem(
-            page: TransactionsPage(),
-            icon: "money-bills",
-            label: 'Transaktionen',
-          ),
-          NavigationItem(
-            page: CategoriesPage(),
-            icon: "icons",
-            label: 'Kategorien',
-          ),
-          NavigationItem(
-            page: AccountsPage(),
-            icon: "building-columns",
-            label: 'Konten',
-          ),
-        ],
-      ),
+      home: Skeleton(pages: const [
+        TransactionsPage(),
+        CategoriesPage(),
+        AccountsPage(),
+      ]),
     );
   }
 }

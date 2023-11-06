@@ -4,9 +4,16 @@ import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/ui/font_awesome_icon.dart';
 import 'package:ma_flutter/ui/level_divider.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/utility/navigable_page.dart';
 
-class CategoriesPage extends StatefulWidget {
+class CategoriesPage extends NavigablePage {
   const CategoriesPage({super.key});
+
+  @override
+  String get icon => "icons";
+
+  @override
+  String get label => "Kategorien";
 
   @override
   State<CategoriesPage> createState() => _CategoriesPageState();

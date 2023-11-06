@@ -9,9 +9,16 @@ class FontAwesomeIcon extends StatelessWidget {
   final Style style;
   final double size;
   final double opacity;
+  final Color? color;
 
-  FontAwesomeIcon(
-      {super.key, this.name, this.style = Style.solid, this.size = 20.0, this.opacity = 1.0});
+  FontAwesomeIcon({
+    super.key,
+    this.name,
+    this.style = Style.solid,
+    this.size = 20.0,
+    this.opacity = 1.0,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,11 @@ class FontAwesomeIcon extends StatelessWidget {
           alignment: Alignment.center,
           maxWidth: double.infinity,
           maxHeight: double.infinity,
-          child: FaIcon(faIconNameMapping[key], size: size),
+          child: FaIcon(
+            faIconNameMapping[key],
+            size: size,
+            color: color,
+          ),
         ),
       ),
     );

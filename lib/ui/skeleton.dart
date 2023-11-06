@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ma_flutter/ui/column_with_separator.dart';
 import 'package:ma_flutter/ui/font_awesome_icon.dart';
-import 'package:ma_flutter/ui/navigation_item.dart';
 import 'package:ma_flutter/ui/navigation_rail_menu_button.dart';
+import 'package:ma_flutter/utility/navigable_page.dart';
 
 class Skeleton extends StatefulWidget {
   static const double headerHeight = 100.0;
   static const double pageBottomPadding = 14.0;
 
-  final List<NavigationItem> navigationItems;
+  final List<NavigablePage> pages;
 
-  const Skeleton({super.key, required this.navigationItems});
+  const Skeleton({super.key, required this.pages});
 
   @override
   State<Skeleton> createState() => _SkeletonState();
@@ -55,15 +56,19 @@ class _SkeletonState extends State<Skeleton> {
       body: Column(
         children: [
           _getHeader(
-            leading: IconButton(
-              icon: FontAwesomeIcon(name: "bars"),
-              onPressed: _openSettings,
-            ),
-            title: widget.navigationItems[_currentPageIndex].label,
-          ),
-          Expanded(child: widget.navigationItems[_currentPageIndex].page)
+              leading: [
+                IconButton(
+                  icon: FontAwesomeIcon(name: "bars"),
+                  onPressed: _openSettings,
+                ),
+                ...widget.pages[_currentPageIndex].getHeaderLeading(context),
+              ],
+              title: widget.pages[_currentPageIndex].label,
+              trailing: widget.pages[_currentPageIndex].getHeaderTrailing(context)),
+          Expanded(child: widget.pages[_currentPageIndex])
         ],
       ),
+      floatingActionButton: widget.pages[_currentPageIndex].getFloatingActionButton(context),
     );
   }
 
@@ -102,22 +107,32 @@ class _SkeletonState extends State<Skeleton> {
           child: Scaffold(
             body: Column(
               children: [
-                _getHeader(title: widget.navigationItems[_currentPageIndex].label),
+                _getHeader(
+                  leading: widget.pages[_currentPageIndex].getHeaderLeading(context),
+                  title: widget.pages[_currentPageIndex].label,
+                  trailing: widget.pages[_currentPageIndex].getHeaderTrailing(context),
+                ),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: widget.navigationItems[_currentPageIndex].page,
+                    child: widget.pages[_currentPageIndex],
                   ),
                 )
               ],
             ),
+            floatingActionButton: widget.pages[_currentPageIndex].getFloatingActionButton(context),
           ),
         ),
       ],
     );
   }
 
-  Widget _getHeader({Widget? leading, String? title, String? subtitle, Widget? trailing}) {
+  Widget _getHeader({
+    List<Widget>? leading,
+    String? title,
+    String? subtitle,
+    List<Widget>? trailing,
+  }) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -131,7 +146,10 @@ class _SkeletonState extends State<Skeleton> {
         padding: EdgeInsets.symmetric(horizontal: padding),
         child: Row(
           children: [
-            if (leading != null) leading,
+            RowWithSeparator(
+              separator: SizedBox(width: 16.0),
+              children: leading ?? [],
+            ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: padding),
@@ -149,7 +167,10 @@ class _SkeletonState extends State<Skeleton> {
                 ),
               ),
             ),
-            if (trailing != null) trailing,
+            RowWithSeparator(
+              separator: SizedBox(width: 16.0),
+              children: trailing ?? [],
+            ),
           ],
         ),
       ),
@@ -157,7 +178,7 @@ class _SkeletonState extends State<Skeleton> {
   }
 
   List<NavigationDestination> _getNavigationBarDestinations() {
-    return widget.navigationItems.map((item) {
+    return widget.pages.map((item) {
       return NavigationDestination(
         icon: FontAwesomeIcon(
           name: item.icon,
@@ -171,7 +192,7 @@ class _SkeletonState extends State<Skeleton> {
   }
 
   List<NavigationRailDestination> _getNavigationRailDestinations() {
-    return widget.navigationItems.map((item) {
+    return widget.pages.map((item) {
       return NavigationRailDestination(
         icon: FontAwesomeIcon(name: item.icon, style: Style.regular),
         selectedIcon: FontAwesomeIcon(name: item.icon, style: Style.solid),

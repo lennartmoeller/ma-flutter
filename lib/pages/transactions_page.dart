@@ -10,10 +10,17 @@ import 'package:ma_flutter/ui/level_divider.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
 import 'package:ma_flutter/utility/german_date.dart';
 import 'package:ma_flutter/utility/money.dart';
+import 'package:ma_flutter/utility/navigable_page.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
-class TransactionsPage extends StatefulWidget {
+class TransactionsPage extends NavigablePage {
   const TransactionsPage({super.key});
+
+  @override
+  String get icon => "money-bills";
+
+  @override
+  String get label => "Transaktionen";
 
   @override
   State<TransactionsPage> createState() => _TransactionsPageState();
