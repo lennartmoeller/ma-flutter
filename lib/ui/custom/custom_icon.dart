@@ -4,14 +4,14 @@ import 'package:font_awesome_flutter/name_icon_mapping.dart';
 
 enum Style { brands, light, regular, solid, thin, sharpLight, sharpRegular, sharpSolid }
 
-class FontAwesomeIcon extends StatelessWidget {
+class CustomIcon extends StatelessWidget {
   final String? name;
   final Style style;
   final double size;
   final double opacity;
   final Color? color;
 
-  FontAwesomeIcon({
+  CustomIcon({
     super.key,
     this.name,
     this.style = Style.solid,

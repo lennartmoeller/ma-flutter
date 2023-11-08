@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
-import 'package:ma_flutter/ui/font_awesome_icon.dart';
-import 'package:ma_flutter/ui/level_divider.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
+import 'package:ma_flutter/ui/custom/custom_divider.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
-import 'package:ma_flutter/utility/german_date.dart';
-import 'package:ma_flutter/utility/money.dart';
-import 'package:ma_flutter/utility/navigable_page.dart';
+import 'package:ma_flutter/util/german_date.dart';
+import 'package:ma_flutter/util/money.dart';
+import 'package:ma_flutter/util/navigable_page.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class TransactionsPage extends NavigablePage {
@@ -69,7 +69,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
                     style: textTheme.bodyMedium,
                   ),
                 ),
-                LevelDivider(level: 0),
+                CustomDivider(level: 0),
               ],
             ),
           ),
@@ -85,7 +85,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
                         alignment: Alignment.center,
                         child: ListTile(
                           title: Text(category.label),
-                          leading: FontAwesomeIcon(name: category.icon),
+                          leading: CustomIcon(name: category.icon),
                           subtitle:
                               transaction.description != null && transaction.description!.isNotEmpty
                                   ? Text(transaction.description!)
@@ -97,7 +97,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
                           ),
                         ),
                       ),
-                      if (index < transactions.length - 1) LevelDivider(level: 1),
+                      if (index < transactions.length - 1) CustomDivider(level: 1),
                     ];
                   },
                 )

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/column_with_separator.dart';
-import 'package:ma_flutter/ui/font_awesome_icon.dart';
+import 'package:ma_flutter/ui/util/column_with_separator.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
 import 'package:ma_flutter/ui/navigation_rail_menu_button.dart';
-import 'package:ma_flutter/utility/navigable_page.dart';
-import 'package:ma_flutter/utility/skeleton_config.dart';
+import 'package:ma_flutter/util/navigable_page.dart';
+import 'package:ma_flutter/util/skeleton_config.dart';
 import 'package:provider/provider.dart';
 
 class Skeleton extends StatefulWidget {
@@ -134,7 +134,7 @@ class SkeletonState extends State<Skeleton> {
         children: [
           if (menuItem)
             IconButton(
-              icon: FontAwesomeIcon(name: "bars"),
+              icon: CustomIcon(name: "bars"),
               onPressed: _openSettings,
             ),
           ...config.headerLeading,
@@ -161,12 +161,12 @@ class SkeletonState extends State<Skeleton> {
   List<NavigationDestination> _getNavigationBarDestinations() {
     return widget.pages.map((item) {
       return NavigationDestination(
-        icon: FontAwesomeIcon(
+        icon: CustomIcon(
           name: item.icon,
           opacity: _navItemUnselectedOpacity,
           style: Style.regular,
         ),
-        selectedIcon: FontAwesomeIcon(name: item.icon, style: Style.solid),
+        selectedIcon: CustomIcon(name: item.icon, style: Style.solid),
         label: item.title,
       );
     }).toList();
@@ -175,8 +175,8 @@ class SkeletonState extends State<Skeleton> {
   List<NavigationRailDestination> _getNavigationRailDestinations() {
     return widget.pages.map((item) {
       return NavigationRailDestination(
-        icon: FontAwesomeIcon(name: item.icon, style: Style.regular),
-        selectedIcon: FontAwesomeIcon(name: item.icon, style: Style.solid),
+        icon: CustomIcon(name: item.icon, style: Style.regular),
+        selectedIcon: CustomIcon(name: item.icon, style: Style.solid),
         label: Text(item.title),
       );
     }).toList();

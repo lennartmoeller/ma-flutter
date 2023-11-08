@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/font_awesome_icon.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
 
 class EditableElement extends StatelessWidget {
   static const double maxDialogContainerWidth = 560.0;
@@ -107,7 +107,7 @@ class EditableElement extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: IconButton(
                     onPressed: () => _closeDialog(context),
-                    icon: FontAwesomeIcon(
+                    icon: CustomIcon(
                       name: "xmark",
                       style: Style.regular,
                       size: 22.0,

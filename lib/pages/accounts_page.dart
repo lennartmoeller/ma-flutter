@@ -2,10 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/ui/editable_element.dart';
-import 'package:ma_flutter/ui/font_awesome_icon.dart';
-import 'package:ma_flutter/ui/level_divider.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
+import 'package:ma_flutter/ui/custom/custom_divider.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
-import 'package:ma_flutter/utility/navigable_page.dart';
+import 'package:ma_flutter/util/navigable_page.dart';
 
 class AccountsPage extends NavigablePage {
   AccountsPage({super.key, required super.skeletonKey});
@@ -48,7 +48,7 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
           disabledElevation: 0,
           onPressed: action,
           label: Text("Hinzufügen"),
-          icon: FontAwesomeIcon(
+          icon: CustomIcon(
             name: "plus",
             size: 18.0,
             style: Style.regular,
@@ -72,7 +72,7 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
         EditableElement(
           closedBuilder: (context, action) => TextButton.icon(
             onPressed: action,
-            icon: FontAwesomeIcon(
+            icon: CustomIcon(
               name: "plus",
               size: 14.0,
               style: Style.regular,
@@ -99,14 +99,14 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
               EditableElement(
                 closedBuilder: (context, action) => ListTile(
                   title: Text(account.label),
-                  leading: FontAwesomeIcon(name: account.icon),
+                  leading: CustomIcon(name: account.icon),
                   mouseCursor: SystemMouseCursors.click,
                   onTap: action,
                 ),
                 dialogTitle: "Konto bearbeiten",
                 dialogContent: Container(),
               ),
-              if (index < accounts.length - 1) LevelDivider(level: 1),
+              if (index < accounts.length - 1) CustomDivider(level: 1),
             ];
           })
           .expand((widgetList) => widgetList)

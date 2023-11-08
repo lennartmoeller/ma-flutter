@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/font_awesome_icon.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
 
 class NavigationRailMenuButton extends StatelessWidget {
@@ -20,7 +20,7 @@ class NavigationRailMenuButton extends StatelessWidget {
           padding: EdgeInsets.only(right: lerpDouble(0, 140, animation.value)!),
           child: Center(
             child: IconButton(
-              icon: FontAwesomeIcon(name: "bars"),
+              icon: CustomIcon(name: "bars"),
               onPressed: onPressed,
             ),
           ),

@@ -8,8 +8,8 @@ import 'package:ma_flutter/pages/categories_page.dart';
 import 'package:ma_flutter/pages/transactions_page.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
 import 'package:ma_flutter/ui/theme/color_schemes.dart';
-import 'package:ma_flutter/utility/http_helper.dart';
-import 'package:ma_flutter/utility/skeleton_config.dart';
+import 'package:ma_flutter/util/http_helper.dart';
+import 'package:ma_flutter/util/skeleton_config.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

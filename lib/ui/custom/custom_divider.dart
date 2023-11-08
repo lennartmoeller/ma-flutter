@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LevelDivider extends StatelessWidget {
+class CustomDivider extends StatelessWidget {
   final int level;
 
-  LevelDivider({required this.level});
+  CustomDivider({required this.level});
 
   @override
   Widget build(BuildContext context) {

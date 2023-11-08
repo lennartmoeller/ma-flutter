@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/category.dart';
-import 'package:ma_flutter/ui/font_awesome_icon.dart';
-import 'package:ma_flutter/ui/level_divider.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
+import 'package:ma_flutter/ui/custom/custom_divider.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
-import 'package:ma_flutter/utility/navigable_page.dart';
+import 'package:ma_flutter/util/navigable_page.dart';
 
 class CategoriesPage extends NavigablePage {
   CategoriesPage({super.key, required super.skeletonKey});
@@ -36,9 +36,9 @@ class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, C
             return [
               ListTile(
                 title: Text(category.label),
-                leading: FontAwesomeIcon(name: category.icon),
+                leading: CustomIcon(name: category.icon),
               ),
-              if (index < categories.length - 1) LevelDivider(level: 1),
+              if (index < categories.length - 1) CustomDivider(level: 1),
             ];
           })
           .expand((widgetList) => widgetList)
