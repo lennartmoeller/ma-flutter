@@ -93,8 +93,10 @@ class EditableElement extends StatelessWidget {
   }
 
   Widget _getThinDeviceDialogContent(BuildContext context) {
+    double statusBarHeight = MediaQuery.of(context).viewPadding.top;
     return Container(
       color: _getOpenedColor(context),
+      padding: EdgeInsets.only(top: statusBarHeight),
       child: Column(
         children: [
           SizedBox(
@@ -136,37 +138,36 @@ class EditableElement extends StatelessWidget {
   }
 
   Widget _getWideDeviceDialogContent(BuildContext context) {
+    double statusBarHeight = MediaQuery.of(context).viewPadding.top;
     return Container(
       constraints: BoxConstraints(maxWidth: maxDialogContainerWidth),
-      child: Padding(
-        padding: EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _getDialogTitle(context),
-            Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: dialogContent,
+      padding: EdgeInsets.only(top: statusBarHeight + 24.0, left: 24.0, right: 24.0, bottom: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _getDialogTitle(context),
+          Padding(
+            padding: EdgeInsets.only(top: 16.0),
+            child: dialogContent,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 24.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => _closeDialog(context),
+                  child: Text("Verwerfen"),
+                ),
+                TextButton(
+                  onPressed: () => _saveElement(context),
+                  child: Text("Speichern"),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => _closeDialog(context),
-                    child: Text("Verwerfen"),
-                  ),
-                  TextButton(
-                    onPressed: () => _saveElement(context),
-                    child: Text("Speichern"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

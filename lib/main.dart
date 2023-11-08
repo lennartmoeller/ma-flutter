@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
@@ -35,6 +36,7 @@ class FinanceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    systemSettings();
     GlobalKey<SkeletonState> skeletonKey = GlobalKey();
     return ChangeNotifierProvider(
       create: (context) => SkeletonConfig(),
@@ -54,5 +56,12 @@ class FinanceApp extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void systemSettings() {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    );
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 }

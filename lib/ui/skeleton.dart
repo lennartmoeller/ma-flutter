@@ -121,40 +121,39 @@ class SkeletonState extends State<Skeleton> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    const padding = (Skeleton.headerHeight - 52.0) / 4;
+    const double padding = (Skeleton.headerHeight - 52.0) / 4;
+    double statusBarHeight = MediaQuery.of(context).viewPadding.top;
 
     return Container(
       color: colorScheme.surface,
-      height: Skeleton.headerHeight,
+      height: Skeleton.headerHeight + statusBarHeight,
       width: double.infinity,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: padding * 2),
-        child: RowWithSeparator(
-          separator: SizedBox(width: padding),
-          children: [
-            if (menuItem)
-              IconButton(
-                icon: FontAwesomeIcon(name: "bars"),
-                onPressed: _openSettings,
-              ),
-            ...config.headerLeading,
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(config.title, style: textTheme.titleLarge),
-                  if (config.subtitle != null)
-                    Text(
-                      config.subtitle!,
-                      style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.normal),
-                    ),
-                ],
-              ),
+      padding: EdgeInsets.only(top: statusBarHeight, left: padding * 2, right: padding * 2),
+      child: RowWithSeparator(
+        separator: SizedBox(width: padding),
+        children: [
+          if (menuItem)
+            IconButton(
+              icon: FontAwesomeIcon(name: "bars"),
+              onPressed: _openSettings,
             ),
-            ...config.headerTrailing,
-          ],
-        ),
+          ...config.headerLeading,
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(config.title, style: textTheme.titleLarge),
+                if (config.subtitle != null)
+                  Text(
+                    config.subtitle!,
+                    style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.normal),
+                  ),
+              ],
+            ),
+          ),
+          ...config.headerTrailing,
+        ],
       ),
     );
   }
