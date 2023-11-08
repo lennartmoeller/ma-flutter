@@ -7,46 +7,26 @@ import 'package:ma_flutter/ui/skeleton.dart';
 import 'package:ma_flutter/utility/navigable_page.dart';
 
 class CategoriesPage extends NavigablePage {
-  const CategoriesPage({super.key});
+  CategoriesPage({super.key, required super.skeletonKey});
 
   @override
   String get icon => "icons";
 
   @override
-  String get label => "Kategorien";
+  String get title => "Kategorien";
 
   @override
   State<CategoriesPage> createState() => _CategoriesPageState();
 }
 
-class _CategoriesPageState extends State<CategoriesPage> {
-  late Future<Map<int, Category>> futureAccounts;
-
+class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, Category>> {
   @override
-  void initState() {
-    super.initState();
-    futureAccounts = Category.getAll();
+  Future<Map<int, Category>> loadData() {
+    return Category.getAll();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder<Map<int, Category>>(
-        future: futureAccounts,
-        builder: (BuildContext context, AsyncSnapshot<Map<int, Category>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasData) {
-            return categoriesList(snapshot.data!);
-          } else {
-            return Text('Kategorien konnten nicht geladen werden');
-          }
-        },
-      ),
-    );
-  }
-
-  Widget categoriesList(Map<int, Category> categories) {
+  Widget content(Map<int, Category> categories) {
     List<Category> categoryList = categories.values.toList();
     categoryList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(

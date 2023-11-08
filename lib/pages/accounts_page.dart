@@ -8,24 +8,44 @@ import 'package:ma_flutter/ui/skeleton.dart';
 import 'package:ma_flutter/utility/navigable_page.dart';
 
 class AccountsPage extends NavigablePage {
-  const AccountsPage({super.key});
+  AccountsPage({super.key, required super.skeletonKey});
 
   @override
   String get icon => "building-columns";
 
   @override
-  String get label => "Konten";
+  String get title => "Konten";
 
   @override
-  Widget? getFloatingActionButton(BuildContext context) {
+  State<AccountsPage> createState() => _AccountsPageState();
+}
+
+class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Account>> {
+  @override
+  Future<Map<int, Account>> loadData() {
+    return Account.getAll();
+  }
+
+  @override
+  Widget? get floatingActionButton {
     double screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth < EditableElement.maxDialogContainerWidth) {
       ColorScheme colorScheme = Theme.of(context).colorScheme;
       return EditableElement(
         closedBorderRadius: 16.0,
+        // fab default border radius
         closedColor: colorScheme.primaryContainer,
-        closedElevation: 2,
+        // fab default background color
+        openedColor: colorScheme.surface,
+        closedElevation: 3,
+        // fab default elevation
         closedBuilder: (context, action) => FloatingActionButton.extended(
+          // remove elevation because elevation is set by EditableElement
+          elevation: 0,
+          focusElevation: 0,
+          hoverElevation: 0,
+          highlightElevation: 0,
+          disabledElevation: 0,
           onPressed: action,
           label: Text("Hinzufügen"),
           icon: FontAwesomeIcon(
@@ -39,17 +59,16 @@ class AccountsPage extends NavigablePage {
         dialogContent: Container(),
       );
     } else {
-      return null; // display floating action button only on small devices
+      return null;
     }
   }
 
   @override
-  List<Widget> getHeaderTrailing(BuildContext context) {
+  List<Widget> get headerTrailing {
+    List<Widget> output = [];
     double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth < EditableElement.maxDialogContainerWidth) {
-      return [];
-    } else {
-      return [
+    if (screenWidth >= EditableElement.maxDialogContainerWidth) {
+      output.add(
         EditableElement(
           closedBuilder: (context, action) => TextButton.icon(
             onPressed: action,
@@ -63,42 +82,13 @@ class AccountsPage extends NavigablePage {
           dialogTitle: "Konto erstellen",
           dialogContent: Container(),
         ),
-      ];
+      );
     }
+    return output;
   }
 
   @override
-  State<AccountsPage> createState() => _AccountsPageState();
-}
-
-class _AccountsPageState extends State<AccountsPage> {
-  late Future<Map<int, Account>> futureAccounts;
-
-  @override
-  void initState() {
-    super.initState();
-    futureAccounts = Account.getAll();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder<Map<int, Account>>(
-        future: futureAccounts,
-        builder: (BuildContext context, AsyncSnapshot<Map<int, Account>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasData) {
-            return accountsList(snapshot.data!);
-          } else {
-            return Text('Konten konnten nicht geladen werden');
-          }
-        },
-      ),
-    );
-  }
-
-  Widget accountsList(Map<int, Account> accounts) {
+  Widget content(Map<int, Account> accounts) {
     List<Account> accountList = accounts.values.toList();
     accountList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(

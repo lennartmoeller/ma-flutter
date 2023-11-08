@@ -14,55 +14,34 @@ import 'package:ma_flutter/utility/navigable_page.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class TransactionsPage extends NavigablePage {
-  const TransactionsPage({super.key});
+  TransactionsPage({super.key, required super.skeletonKey});
 
   @override
   String get icon => "money-bills";
 
   @override
-  String get label => "Transaktionen";
+  String get title => "Transaktionen";
 
   @override
   State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage> {
-  late Future<Map<int, Account>> futureAccounts;
-  late Future<Map<int, Category>> futureCategories;
-  late Future<Map<int, Transaction>> futureTransactions;
-
+class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<dynamic>> {
   @override
-  void initState() {
-    super.initState();
-    futureAccounts = Account.getAll();
-    futureCategories = Category.getAll();
-    futureTransactions = Transaction.getAll();
+  Future<List<dynamic>> loadData() {
+    return Future.wait([
+      Account.getAll(),
+      Category.getAll(),
+      Transaction.getAll(),
+    ]);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder<List<dynamic>>(
-        future: Future.wait([futureAccounts, futureCategories, futureTransactions]),
-        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (snapshot.hasData) {
-            return transactionList(
-              snapshot.data![0] as Map<int, Account>,
-              snapshot.data![1] as Map<int, Category>,
-              snapshot.data![2] as Map<int, Transaction>,
-            );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else {
-            return Text('Transaktionen konnten nicht geladen werden');
-          }
-        },
-      ),
-    );
-  }
+  Widget content(List<dynamic> data) {
+    var accounts = data[0] as Map<int, Account>;
+    var categories = data[1] as Map<int, Category>;
+    var transactions = data[2] as Map<int, Transaction>;
 
-  Widget transactionList(Map<int, Account> accounts, Map<int, Category> categories,
-      Map<int, Transaction> transactions) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 

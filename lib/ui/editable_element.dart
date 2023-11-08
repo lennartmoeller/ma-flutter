@@ -57,21 +57,37 @@ class EditableElement extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(closedBorderRadius ?? 0)),
           color: _getClosedColor(context),
         ),
-        child: closedBuilder(
-          context,
-          () => showDialog(
+        child: closedBuilder(context, () {
+          var animationController = AnimationController(
+            duration: const Duration(milliseconds: 200),
+            vsync: Navigator.of(context),
+          );
+          animationController.forward();
+          showDialog(
             context: context,
             builder: (BuildContext context) {
-              return Dialog(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+              return FadeTransition(
+                opacity: CurvedAnimation(
+                  parent: animationController,
+                  curve: Curves.linear,
+                ).drive(Tween(begin: 0.0, end: 1.0)),
+                child: ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: animationController,
+                    curve: Curves.easeOut,
+                  ).drive(Tween(begin: 0.9, end: 1.0)),
+                  child: Dialog(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: _getWideDeviceDialogContent(context),
+                  ),
                 ),
-                child: _getWideDeviceDialogContent(context),
               );
             },
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

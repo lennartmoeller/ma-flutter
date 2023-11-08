@@ -3,6 +3,8 @@ import 'package:ma_flutter/ui/column_with_separator.dart';
 import 'package:ma_flutter/ui/font_awesome_icon.dart';
 import 'package:ma_flutter/ui/navigation_rail_menu_button.dart';
 import 'package:ma_flutter/utility/navigable_page.dart';
+import 'package:ma_flutter/utility/skeleton_config.dart';
+import 'package:provider/provider.dart';
 
 class Skeleton extends StatefulWidget {
   static const double headerHeight = 100.0;
@@ -13,10 +15,10 @@ class Skeleton extends StatefulWidget {
   const Skeleton({super.key, required this.pages});
 
   @override
-  State<Skeleton> createState() => _SkeletonState();
+  State<Skeleton> createState() => SkeletonState();
 }
 
-class _SkeletonState extends State<Skeleton> {
+class SkeletonState extends State<Skeleton> {
   static const double _compressedSidebarWidth = 80.0;
   static const double _extendedSidebarWidth = 220.0;
   static const double _minContentWidth = 500.0;
@@ -25,14 +27,15 @@ class _SkeletonState extends State<Skeleton> {
   late ColorScheme _colorScheme;
   late TextTheme _textTheme;
   late IconThemeData _iconTheme;
-
-  int _currentPageIndex = 0;
+  late SkeletonConfig config;
 
   @override
   Widget build(BuildContext context) {
     _colorScheme = Theme.of(context).colorScheme;
     _textTheme = Theme.of(context).textTheme;
     _iconTheme = Theme.of(context).iconTheme;
+
+    config = Provider.of<SkeletonConfig>(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -50,25 +53,16 @@ class _SkeletonState extends State<Skeleton> {
       bottomNavigationBar: NavigationBar(
         destinations: _getNavigationBarDestinations(),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        onDestinationSelected: _updateCurrentPageIndex,
-        selectedIndex: _currentPageIndex,
+        onDestinationSelected: config.switchPage,
+        selectedIndex: config.pageIndex,
       ),
       body: Column(
         children: [
-          _getHeader(
-              leading: [
-                IconButton(
-                  icon: FontAwesomeIcon(name: "bars"),
-                  onPressed: _openSettings,
-                ),
-                ...widget.pages[_currentPageIndex].getHeaderLeading(context),
-              ],
-              title: widget.pages[_currentPageIndex].label,
-              trailing: widget.pages[_currentPageIndex].getHeaderTrailing(context)),
-          Expanded(child: widget.pages[_currentPageIndex])
+          _getHeader(menuItem: true),
+          Expanded(child: widget.pages[config.pageIndex]),
         ],
       ),
-      floatingActionButton: widget.pages[_currentPageIndex].getFloatingActionButton(context),
+      floatingActionButton: config.fab,
     );
   }
 
@@ -93,46 +87,37 @@ class _SkeletonState extends State<Skeleton> {
             elevation: 3.0,
             extended: deviceWidth >= (_minContentWidth + _extendedSidebarWidth),
             minExtendedWidth: _extendedSidebarWidth,
-            onDestinationSelected: _updateCurrentPageIndex,
+            onDestinationSelected: config.switchPage,
             unselectedLabelTextStyle: navItemBaseTextStyle.copyWith(
               color: _colorScheme.onSurface.withOpacity(_navItemUnselectedOpacity),
             ),
             selectedLabelTextStyle: navItemBaseTextStyle,
             unselectedIconTheme: _iconTheme.copyWith(opacity: _navItemUnselectedOpacity),
             selectedIconTheme: _iconTheme,
-            selectedIndex: _currentPageIndex,
+            selectedIndex: config.pageIndex,
           ),
         ),
         Expanded(
           child: Scaffold(
             body: Column(
               children: [
-                _getHeader(
-                  leading: widget.pages[_currentPageIndex].getHeaderLeading(context),
-                  title: widget.pages[_currentPageIndex].label,
-                  trailing: widget.pages[_currentPageIndex].getHeaderTrailing(context),
-                ),
+                _getHeader(),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: widget.pages[_currentPageIndex],
+                    child: widget.pages[config.pageIndex],
                   ),
                 )
               ],
             ),
-            floatingActionButton: widget.pages[_currentPageIndex].getFloatingActionButton(context),
+            floatingActionButton: config.fab,
           ),
         ),
       ],
     );
   }
 
-  Widget _getHeader({
-    List<Widget>? leading,
-    String? title,
-    String? subtitle,
-    List<Widget>? trailing,
-  }) {
+  Widget _getHeader({bool menuItem = false}) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -143,34 +128,31 @@ class _SkeletonState extends State<Skeleton> {
       height: Skeleton.headerHeight,
       width: double.infinity,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: padding),
-        child: Row(
+        padding: EdgeInsets.symmetric(horizontal: padding * 2),
+        child: RowWithSeparator(
+          separator: SizedBox(width: padding),
           children: [
-            RowWithSeparator(
-              separator: SizedBox(width: 16.0),
-              children: leading ?? [],
-            ),
+            if (menuItem)
+              IconButton(
+                icon: FontAwesomeIcon(name: "bars"),
+                onPressed: _openSettings,
+              ),
+            ...config.headerLeading,
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: padding),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (title != null) Text(title, style: textTheme.titleLarge),
-                    if (subtitle != null)
-                      Text(
-                        subtitle,
-                        style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.normal),
-                      ),
-                  ],
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(config.title, style: textTheme.titleLarge),
+                  if (config.subtitle != null)
+                    Text(
+                      config.subtitle!,
+                      style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.normal),
+                    ),
+                ],
               ),
             ),
-            RowWithSeparator(
-              separator: SizedBox(width: 16.0),
-              children: trailing ?? [],
-            ),
+            ...config.headerTrailing,
           ],
         ),
       ),
@@ -186,7 +168,7 @@ class _SkeletonState extends State<Skeleton> {
           style: Style.regular,
         ),
         selectedIcon: FontAwesomeIcon(name: item.icon, style: Style.solid),
-        label: item.label,
+        label: item.title,
       );
     }).toList();
   }
@@ -196,15 +178,9 @@ class _SkeletonState extends State<Skeleton> {
       return NavigationRailDestination(
         icon: FontAwesomeIcon(name: item.icon, style: Style.regular),
         selectedIcon: FontAwesomeIcon(name: item.icon, style: Style.solid),
-        label: Text(item.label),
+        label: Text(item.title),
       );
     }).toList();
-  }
-
-  void _updateCurrentPageIndex(int value) {
-    setState(() {
-      _currentPageIndex = value;
-    });
   }
 
   void _openSettings() {

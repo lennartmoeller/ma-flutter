@@ -8,6 +8,8 @@ import 'package:ma_flutter/pages/transactions_page.dart';
 import 'package:ma_flutter/ui/skeleton.dart';
 import 'package:ma_flutter/ui/theme/color_schemes.dart';
 import 'package:ma_flutter/utility/http_helper.dart';
+import 'package:ma_flutter/utility/skeleton_config.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   // avoids errors caused by flutter upgrade
@@ -33,17 +35,24 @@ class FinanceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Haushaltsbuch',
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      // TODO: Remove this after debugging
-      themeMode: ThemeMode.light,
-      home: Skeleton(pages: const [
-        TransactionsPage(),
-        CategoriesPage(),
-        AccountsPage(),
-      ]),
+    GlobalKey<SkeletonState> skeletonKey = GlobalKey();
+    return ChangeNotifierProvider(
+      create: (context) => SkeletonConfig(),
+      child: MaterialApp(
+        title: 'Haushaltsbuch',
+        theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+        darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+        // TODO: Remove this after debugging
+        themeMode: ThemeMode.light,
+        home: Skeleton(
+          key: skeletonKey,
+          pages: [
+            TransactionsPage(skeletonKey: skeletonKey),
+            CategoriesPage(skeletonKey: skeletonKey),
+            AccountsPage(skeletonKey: skeletonKey),
+          ],
+        ),
+      ),
     );
   }
 }

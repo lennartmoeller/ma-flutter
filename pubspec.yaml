@@ -16,6 +16,7 @@ dependencies:
   intl: ^0.18.1
   font_awesome_flutter: ^10.6.0
   animations: ^2.0.8
+  provider: ^6.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
