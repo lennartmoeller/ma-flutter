@@ -6,7 +6,7 @@ import 'package:ma_flutter/model/transaction.dart';
 import 'package:ma_flutter/pages/accounts_page.dart';
 import 'package:ma_flutter/pages/categories_page.dart';
 import 'package:ma_flutter/pages/transactions_page.dart';
-import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 import 'package:ma_flutter/ui/theme/color_schemes.dart';
 import 'package:ma_flutter/util/http_helper.dart';
 import 'package:ma_flutter/util/skeleton_config.dart';
@@ -19,13 +19,13 @@ void main() async {
   final Future<Map<String, dynamic>> response = HttpHelper.get('data');
   final data = await response;
   (data['accounts'] as Map<String, dynamic>).forEach((key, value) {
-    Account.fromJson(value).insert();
+    Account.fromMap(value).insert();
   });
   (data['categories'] as Map<String, dynamic>).forEach((key, value) {
-    Category.fromJson(value).insert();
+    Category.fromMap(value).insert();
   });
   (data['transactions'] as Map<String, dynamic>).forEach((key, value) {
-    Transaction.fromJson(value).insert();
+    Transaction.fromMap(value).insert();
   });
 
   runApp(const FinanceApp());

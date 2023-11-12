@@ -1,63 +1,70 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/ui/custom/custom_icon.dart';
+import 'package:ma_flutter/ui/form/custom_form.dart';
+import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 
-class EditableElement extends StatelessWidget {
+class EditableElement extends StatefulWidget {
   static const double maxDialogContainerWidth = 560.0;
 
   final Widget Function(BuildContext, void Function()) closedBuilder;
   final String dialogTitle;
-  final Widget dialogContent;
-  final void Function()? onClose;
-  final bool Function()? onSave;
+  final Widget form;
+  final GlobalKey<CustomFormState> formKey;
+  final bool Function(Map<String, dynamic> values)? onSave;
+  final bool Function(Map<String, dynamic> values)? onClose;
   final double? closedBorderRadius;
   final double? closedElevation;
   final Color? closedColor;
-  final Color? openedColor;
 
   const EditableElement({
     required this.closedBuilder,
     required this.dialogTitle,
-    required this.dialogContent,
-    this.onClose,
+    required this.form,
+    required this.formKey,
     this.onSave,
+    this.onClose,
     this.closedBorderRadius,
     this.closedElevation,
     this.closedColor,
-    this.openedColor,
   });
 
   @override
+  State<EditableElement> createState() => _EditableElementState();
+}
+
+class _EditableElementState extends State<EditableElement> {
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth < maxDialogContainerWidth) {
-      return _buildForThinDevices(context);
+    if (screenWidth < EditableElement.maxDialogContainerWidth) {
+      return _buildForThinDevices();
     } else {
-      return _buildForWideDevices(context);
+      return _buildForWideDevices();
     }
   }
 
-  Widget _buildForThinDevices(BuildContext context) {
+  Widget _buildForThinDevices() {
     return OpenContainer(
       transitionDuration: Duration(milliseconds: 500),
-      closedElevation: closedElevation ?? 0,
+      closedElevation: widget.closedElevation ?? 0,
       closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(closedBorderRadius ?? 0))),
-      closedColor: _getClosedColor(context),
-      closedBuilder: closedBuilder,
-      openBuilder: (context, action) => _getThinDeviceDialogContent(context),
+          borderRadius: BorderRadius.all(Radius.circular(widget.closedBorderRadius ?? 0))),
+      closedColor: widget.closedColor ?? SkeletonState.colorScheme.surface,
+      closedBuilder: widget.closedBuilder,
+      openBuilder: (context, action) => _getThinDeviceDialogContent(),
     );
   }
 
-  Widget _buildForWideDevices(BuildContext context) {
+  Widget _buildForWideDevices() {
     return Material(
-      elevation: closedElevation ?? 0,
+      elevation: widget.closedElevation ?? 0,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(closedBorderRadius ?? 0)),
-          color: _getClosedColor(context),
+          borderRadius: BorderRadius.all(Radius.circular(widget.closedBorderRadius ?? 0)),
+          color: widget.closedColor ?? SkeletonState.colorScheme.surface,
         ),
-        child: closedBuilder(context, () {
+        child: widget.closedBuilder(context, () {
           var animationController = AnimationController(
             duration: const Duration(milliseconds: 200),
             vsync: Navigator.of(context),
@@ -81,7 +88,7 @@ class EditableElement extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: _getWideDeviceDialogContent(context),
+                    child: _getWideDeviceDialogContent(),
                   ),
                 ),
               );
@@ -92,11 +99,10 @@ class EditableElement extends StatelessWidget {
     );
   }
 
-  Widget _getThinDeviceDialogContent(BuildContext context) {
-    double statusBarHeight = MediaQuery.of(context).viewPadding.top;
+  Widget _getThinDeviceDialogContent() {
     return Container(
-      color: _getOpenedColor(context),
-      padding: EdgeInsets.only(top: statusBarHeight),
+      color: SkeletonState.colorScheme.surface,
+      padding: EdgeInsets.only(top: SkeletonState.statusBarHeight),
       child: Column(
         children: [
           SizedBox(
@@ -106,7 +112,7 @@ class EditableElement extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: IconButton(
-                    onPressed: () => _closeDialog(context),
+                    onPressed: () => _onCloseButtonClick(),
                     icon: CustomIcon(
                       name: "xmark",
                       style: Style.regular,
@@ -114,11 +120,11 @@ class EditableElement extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(child: _getDialogTitle(context)),
+                Expanded(child: _getDialogTitle()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextButton(
-                    onPressed: () => _saveElement(context),
+                    onPressed: () => _onSaveButtonClick(),
                     child: Text("Speichern"),
                   ),
                 ),
@@ -129,7 +135,7 @@ class EditableElement extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: SizedBox(
               width: double.infinity,
-              child: dialogContent,
+              child: widget.form,
             ),
           ),
         ],
@@ -137,19 +143,19 @@ class EditableElement extends StatelessWidget {
     );
   }
 
-  Widget _getWideDeviceDialogContent(BuildContext context) {
+  Widget _getWideDeviceDialogContent() {
     double statusBarHeight = MediaQuery.of(context).viewPadding.top;
     return Container(
-      constraints: BoxConstraints(maxWidth: maxDialogContainerWidth),
+      constraints: BoxConstraints(maxWidth: EditableElement.maxDialogContainerWidth),
       padding: EdgeInsets.only(top: statusBarHeight + 24.0, left: 24.0, right: 24.0, bottom: 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _getDialogTitle(context),
+          _getDialogTitle(),
           Padding(
             padding: EdgeInsets.only(top: 16.0),
-            child: dialogContent,
+            child: widget.form,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24.0),
@@ -157,11 +163,11 @@ class EditableElement extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => _closeDialog(context),
+                  onPressed: () => _onCloseButtonClick(),
                   child: Text("Verwerfen"),
                 ),
                 TextButton(
-                  onPressed: () => _saveElement(context),
+                  onPressed: () => _onSaveButtonClick(),
                   child: Text("Speichern"),
                 ),
               ],
@@ -172,29 +178,28 @@ class EditableElement extends StatelessWidget {
     );
   }
 
-  Widget _getDialogTitle(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
+  Widget _getDialogTitle() {
     return Text(
-      dialogTitle,
-      style: textTheme.titleLarge,
+      widget.dialogTitle,
+      style: SkeletonState.textTheme.titleLarge,
+      maxLines: 1,
     );
   }
 
-  Color _getOpenedColor(BuildContext context) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return openedColor ?? colorScheme.surface;
+  void _onSaveButtonClick() {
+    if (!widget.formKey.currentState!.isValid) {
+      return; // error in form input element
+    }
+    Map<String, dynamic> inputValues = widget.formKey.currentState!.inputValues;
+    if (widget.onSave == null || widget.onSave!(inputValues)) {
+      Navigator.pop(context);
+    }
   }
 
-  Color _getClosedColor(BuildContext context) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return closedColor ?? colorScheme.surface;
-  }
-
-  void _closeDialog(BuildContext context) {
-    Navigator.pop(context);
-  }
-
-  void _saveElement(BuildContext context) {
-    if (onSave == null || onSave!()) _closeDialog(context);
+  void _onCloseButtonClick() {
+    Map<String, dynamic> inputValues = widget.formKey.currentState!.inputValues;
+    if (widget.onClose == null || widget.onClose!(inputValues)) {
+      Navigator.pop(context);
+    }
   }
 }

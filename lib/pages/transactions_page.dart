@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
-import 'package:ma_flutter/ui/custom/custom_icon.dart';
 import 'package:ma_flutter/ui/custom/custom_divider.dart';
-import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
+import 'package:ma_flutter/ui/skeleton/skeleton.dart';
+import 'package:ma_flutter/util/euro.dart';
 import 'package:ma_flutter/util/german_date.dart';
-import 'package:ma_flutter/util/money.dart';
 import 'package:ma_flutter/util/navigable_page.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -37,17 +37,15 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
   }
 
   @override
-  Widget content(List<dynamic> data) {
+  Widget content() {
     var accounts = data[0] as Map<int, Account>;
     var categories = data[1] as Map<int, Category>;
     var transactions = data[2] as Map<int, Transaction>;
 
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    TextTheme textTheme = Theme.of(context).textTheme;
-
     // group transactions by date, then sort groups by date
     var groupedTransactions = SplayTreeMap.from(
-        groupBy<Transaction, String>(transactions.values, (t) => t.date.toString()));
+      groupBy<Transaction, String>(transactions.values, (t) => t.date.toString()),
+    );
 
     return ListView.builder(
       padding: EdgeInsets.only(bottom: Skeleton.pageBottomPadding),
@@ -57,7 +55,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
         List<Transaction> transactions = groupedTransactions[date]!;
         return StickyHeader(
           header: Container(
-            color: colorScheme.surface,
+            color: SkeletonState.colorScheme.surface,
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +64,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
                   padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
                   child: Text(
                     GermanDate(date).beautifyDate(),
-                    style: textTheme.bodyMedium,
+                    style: SkeletonState.textTheme.bodyMedium,
                   ),
                 ),
                 CustomDivider(level: 0),
@@ -93,7 +91,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
                           trailing: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Text(account.label), Text(Money.format(transaction.amount))],
+                            children: [Text(account.label), Text(Euro.toStr(transaction.amount))],
                           ),
                         ),
                       ),

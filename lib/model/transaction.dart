@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:ma_flutter/database/database_helper.dart';
-import 'package:ma_flutter/database/row.dart';
+import 'package:ma_flutter/database/database_row.dart';
 import 'package:ma_flutter/util/german_date.dart';
 import 'package:sqflite/sqflite.dart';
 
-class Transaction extends Row {
+class Transaction extends DatabaseRow {
   @override
   String get tableName => 'transactions';
 
@@ -22,29 +22,39 @@ class Transaction extends Row {
     required this.date,
     required this.account,
     required this.category,
-    required this.description,
+    this.description,
     required this.amount,
   });
 
   static Future<Map<int, Transaction>> getAll() async {
     final Database db = await DatabaseHelper.getDatabaseConnector();
     final List<Map<String, dynamic>> maps = await db.query('transactions');
-    return {for (var map in maps) map['id'] as int: Transaction.fromJson(map)};
+    return {for (var map in maps) map['id'] as int: Transaction.fromMap(map)};
   }
 
-  factory Transaction.fromJson(Map<String, dynamic> json) {
+  factory Transaction.fromMap(Map<String, dynamic> map) {
     return Transaction(
-      id: json['id'] as int,
-      date: GermanDate(json['date'] as String),
-      account: json['account'] as int,
-      category: json['category'] as int,
-      description: json['description'] as String,
-      amount: json['amount'] as int,
+      id: map['id'] as int,
+      date: GermanDate(map['date'] as String),
+      account: map['account'] as int,
+      category: map['category'] as int,
+      description: map['description'] as String,
+      amount: map['amount'] as int,
     );
   }
 
   @override
-  Map<String, Object?> toJson() {
+  void updateFromMap(Map<String, dynamic> map) {
+    id = map['id'] ?? id;
+    date = map['date'] ?? date;
+    account = map['account'] ?? account;
+    category = map['category'] ?? category;
+    description = map.containsKey('description') ? map['description'] : description;
+    amount = map['amount'] ?? amount;
+  }
+
+  @override
+  Map<String, Object?> toMap() {
     return {
       'id': id,
       'date': date.toString(),

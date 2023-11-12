@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:ma_flutter/database/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract class Row {
+abstract class DatabaseRow {
   String get tableName;
 
   abstract int id;
@@ -12,7 +12,7 @@ abstract class Row {
     final Database db = await DatabaseHelper.getDatabaseConnector();
     await db.insert(
       tableName,
-      toJson(),
+      toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -21,7 +21,7 @@ abstract class Row {
     final Database db = await DatabaseHelper.getDatabaseConnector();
     await db.update(
       tableName,
-      toJson(),
+      toMap(),
       where: 'id = ?',
       whereArgs: [id],
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -37,7 +37,7 @@ abstract class Row {
     );
   }
 
-  Map<String, Object?> toJson() {
-    throw UnimplementedError();
-  }
+  void updateFromMap(Map<String, dynamic> map);
+
+  Map<String, Object?> toMap();
 }

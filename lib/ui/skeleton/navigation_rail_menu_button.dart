@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/ui/custom/custom_icon.dart';
-import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 
 class NavigationRailMenuButton extends StatelessWidget {
   final VoidCallback? onPressed;

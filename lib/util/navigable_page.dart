@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 
 abstract class NavigablePage extends StatefulWidget {
   final GlobalKey<SkeletonState> skeletonKey;
@@ -14,6 +14,8 @@ abstract class NavigablePage extends StatefulWidget {
 abstract class NavigablePageState<T extends NavigablePage, K> extends State<T> {
   late Future<K> futureData;
 
+  late K data;
+
   String? get title => widget.title;
 
   String? get subtitle => null;
@@ -26,7 +28,7 @@ abstract class NavigablePageState<T extends NavigablePage, K> extends State<T> {
 
   Future<K> loadData();
 
-  Widget content(K data);
+  Widget content();
 
   @override
   void initState() {
@@ -49,7 +51,8 @@ abstract class NavigablePageState<T extends NavigablePage, K> extends State<T> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          return content(snapshot.data as K);
+          data = snapshot.data as K;
+          return content();
         } else {
           return Center(child: Text("Beim Laden der Daten ist ein Fehler aufgetreten"));
         }

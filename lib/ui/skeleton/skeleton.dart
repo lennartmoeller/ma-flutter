@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/util/column_with_separator.dart';
 import 'package:ma_flutter/ui/custom/custom_icon.dart';
-import 'package:ma_flutter/ui/navigation_rail_menu_button.dart';
+import 'package:ma_flutter/ui/skeleton/navigation_rail_menu_button.dart';
+import 'package:ma_flutter/ui/util/column_with_separator.dart';
 import 'package:ma_flutter/util/navigable_page.dart';
 import 'package:ma_flutter/util/skeleton_config.dart';
 import 'package:provider/provider.dart';
@@ -23,19 +23,20 @@ class SkeletonState extends State<Skeleton> {
   static const double _extendedSidebarWidth = 220.0;
   static const double _minContentWidth = 500.0;
   static const double _navItemUnselectedOpacity = 0.55;
+  static late double statusBarHeight;
+  static late ColorScheme colorScheme;
+  static late TextTheme textTheme;
+  static late IconThemeData iconTheme;
 
-  late ColorScheme _colorScheme;
-  late TextTheme _textTheme;
-  late IconThemeData _iconTheme;
   late SkeletonConfig config;
 
   @override
   Widget build(BuildContext context) {
-    _colorScheme = Theme.of(context).colorScheme;
-    _textTheme = Theme.of(context).textTheme;
-    _iconTheme = Theme.of(context).iconTheme;
-
+    colorScheme = Theme.of(context).colorScheme;
+    textTheme = Theme.of(context).textTheme;
+    iconTheme = Theme.of(context).iconTheme;
     config = Provider.of<SkeletonConfig>(context);
+    statusBarHeight = MediaQuery.of(context).viewPadding.top;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -67,7 +68,7 @@ class SkeletonState extends State<Skeleton> {
   }
 
   Widget _buildForWideDevices(double deviceWidth) {
-    TextStyle navItemBaseTextStyle = _textTheme.bodyMedium!.copyWith(
+    TextStyle navItemBaseTextStyle = textTheme.bodyMedium!.copyWith(
       fontWeight: FontWeight.w500,
       fontSize: 13,
       letterSpacing: 0.2,
@@ -78,8 +79,8 @@ class SkeletonState extends State<Skeleton> {
         SafeArea(
           child: NavigationRail(
             backgroundColor: ElevationOverlay.colorWithOverlay(
-              _colorScheme.surface,
-              _colorScheme.primary,
+              colorScheme.surface,
+              colorScheme.primary,
               3.0,
             ),
             leading: NavigationRailMenuButton(onPressed: _openSettings),
@@ -89,11 +90,11 @@ class SkeletonState extends State<Skeleton> {
             minExtendedWidth: _extendedSidebarWidth,
             onDestinationSelected: config.switchPage,
             unselectedLabelTextStyle: navItemBaseTextStyle.copyWith(
-              color: _colorScheme.onSurface.withOpacity(_navItemUnselectedOpacity),
+              color: colorScheme.onSurface.withOpacity(_navItemUnselectedOpacity),
             ),
             selectedLabelTextStyle: navItemBaseTextStyle,
-            unselectedIconTheme: _iconTheme.copyWith(opacity: _navItemUnselectedOpacity),
-            selectedIconTheme: _iconTheme,
+            unselectedIconTheme: iconTheme.copyWith(opacity: _navItemUnselectedOpacity),
+            selectedIconTheme: iconTheme,
             selectedIndex: config.pageIndex,
           ),
         ),
@@ -118,12 +119,8 @@ class SkeletonState extends State<Skeleton> {
   }
 
   Widget _getHeader({bool menuItem = false}) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    TextTheme textTheme = Theme.of(context).textTheme;
-
     const double padding = (Skeleton.headerHeight - 52.0) / 4;
     double statusBarHeight = MediaQuery.of(context).viewPadding.top;
-
     return Container(
       color: colorScheme.surface,
       height: Skeleton.headerHeight + statusBarHeight,

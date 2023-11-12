@@ -1,10 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/model/account.dart';
-import 'package:ma_flutter/ui/editable_element.dart';
-import 'package:ma_flutter/ui/custom/custom_icon.dart';
 import 'package:ma_flutter/ui/custom/custom_divider.dart';
-import 'package:ma_flutter/ui/skeleton.dart';
+import 'package:ma_flutter/ui/custom/custom_icon.dart';
+import 'package:ma_flutter/ui/form/create_element_floating_action_button.dart';
+import 'package:ma_flutter/ui/form/create_element_text_button.dart';
+import 'package:ma_flutter/ui/form/custom_form.dart';
+import 'package:ma_flutter/ui/form/editable_element.dart';
+import 'package:ma_flutter/ui/form/inputs/euro_form_input.dart';
+import 'package:ma_flutter/ui/form/inputs/icon_form_input.dart';
+import 'package:ma_flutter/ui/form/inputs/text_form_input.dart';
+import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 import 'package:ma_flutter/util/navigable_page.dart';
 
 class AccountsPage extends NavigablePage {
@@ -21,6 +27,8 @@ class AccountsPage extends NavigablePage {
 }
 
 class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Account>> {
+  final _formKey = GlobalKey<CustomFormState>();
+
   @override
   Future<Map<int, Account>> loadData() {
     return Account.getAll();
@@ -28,68 +36,33 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
 
   @override
   Widget? get floatingActionButton {
-    double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth < EditableElement.maxDialogContainerWidth) {
-      ColorScheme colorScheme = Theme.of(context).colorScheme;
-      return EditableElement(
-        closedBorderRadius: 16.0,
-        // fab default border radius
-        closedColor: colorScheme.primaryContainer,
-        // fab default background color
-        openedColor: colorScheme.surface,
-        closedElevation: 3,
-        // fab default elevation
-        closedBuilder: (context, action) => FloatingActionButton.extended(
-          // remove elevation because elevation is set by EditableElement
-          elevation: 0,
-          focusElevation: 0,
-          hoverElevation: 0,
-          highlightElevation: 0,
-          disabledElevation: 0,
-          onPressed: action,
-          label: Text("Hinzufügen"),
-          icon: CustomIcon(
-            name: "plus",
-            size: 18.0,
-            style: Style.regular,
-            color: colorScheme.onPrimaryContainer,
-          ),
-        ),
-        dialogTitle: "Konto erstellen",
-        dialogContent: Container(),
-      );
-    } else {
-      return null;
-    }
+    return MediaQuery.of(context).size.width < EditableElement.maxDialogContainerWidth
+        ? CreateElementFloatingActionButton(
+            form: _getForm(),
+            formKey: _formKey,
+            dialogTitle: "Konto erstellen",
+            onSave: (values) => _onSave(values: values),
+          )
+        : null;
   }
 
   @override
   List<Widget> get headerTrailing {
-    List<Widget> output = [];
-    double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth >= EditableElement.maxDialogContainerWidth) {
-      output.add(
-        EditableElement(
-          closedBuilder: (context, action) => TextButton.icon(
-            onPressed: action,
-            icon: CustomIcon(
-              name: "plus",
-              size: 14.0,
-              style: Style.regular,
-            ),
-            label: Text("Hinzufügen"),
-          ),
-          dialogTitle: "Konto erstellen",
-          dialogContent: Container(),
-        ),
-      );
-    }
-    return output;
+    return MediaQuery.of(context).size.width >= EditableElement.maxDialogContainerWidth
+        ? [
+            CreateElementTextButton(
+              form: _getForm(),
+              formKey: _formKey,
+              dialogTitle: "Konto erstellen",
+              onSave: (values) => _onSave(values: values),
+            )
+          ]
+        : [];
   }
 
   @override
-  Widget content(Map<int, Account> accounts) {
-    List<Account> accountList = accounts.values.toList();
+  Widget content() {
+    List<Account> accountList = data.values.toList();
     accountList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(
       padding: EdgeInsets.only(bottom: Skeleton.pageBottomPadding),
@@ -104,13 +77,58 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
                   onTap: action,
                 ),
                 dialogTitle: "Konto bearbeiten",
-                dialogContent: Container(),
+                form: _getForm(account: account),
+                formKey: _formKey,
+                onSave: (values) => _onSave(account: account, values: values),
               ),
-              if (index < accounts.length - 1) CustomDivider(level: 1),
+              if (index < accountList.length - 1) CustomDivider(level: 1),
             ];
           })
           .expand((widgetList) => widgetList)
           .toList(),
     );
+  }
+
+  Widget _getForm({Account? account}) {
+    return CustomForm(
+      key: _formKey,
+      formBuilder: () => Column(
+        children: [
+          TextFormInput(
+            id: "label",
+            formKey: _formKey,
+            label: "Bezeichnung",
+            initial: account?.label ?? "",
+          ),
+          EuroFormInput(
+            id: "start_balance",
+            formKey: _formKey,
+            label: "Startbetrag",
+            initial: account?.startBalance ?? 0,
+          ),
+          IconFormInput(
+            id: "icon",
+            formKey: _formKey,
+            label: "Icon-Name",
+            initial: account?.icon ?? "",
+          ),
+        ],
+      ),
+    );
+  }
+
+  bool _onSave({Account? account, required Map<String, dynamic> values}) {
+    // TODO: Make API request, get ID...
+    if (account == null) {
+      account = Account.fromMap({'id': 100, ...values});
+      account.insert();
+    } else {
+      account.updateFromMap(values);
+      account.update();
+    }
+    setState(() {
+      data[account!.id] = account;
+    });
+    return true;
   }
 }
