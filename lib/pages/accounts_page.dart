@@ -11,6 +11,7 @@ import 'package:ma_flutter/ui/form/inputs/euro_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/icon_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/text_form_input.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
+import 'package:ma_flutter/util/http_helper.dart';
 import 'package:ma_flutter/util/navigable_page.dart';
 
 class AccountsPage extends NavigablePage {
@@ -118,10 +119,13 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
     );
   }
 
-  bool _onSave({Account? account, required Map<String, dynamic> values}) {
-    // TODO: Make API request, get ID...
+  Future<bool> _onSave({Account? account, required Map<String, dynamic> values}) async {
+    if (account != null) {
+      values["id"] = account.id;
+    }
+    Map<String, dynamic> response = await HttpHelper.put("account", values);
     if (account == null) {
-      account = Account.fromMap({'id': 100, ...values});
+      account = Account.fromMap({'id': response["id"], ...values});
       account.insert();
     } else {
       account.updateFromMap(values);

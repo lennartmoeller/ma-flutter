@@ -11,7 +11,7 @@ class EditableElement extends StatefulWidget {
   final String dialogTitle;
   final Widget form;
   final GlobalKey<CustomFormState> formKey;
-  final bool Function(Map<String, dynamic> values)? onSave;
+  final Future<bool> Function(Map<String, dynamic> values)? onSave;
   final bool Function(Map<String, dynamic> values)? onClose;
   final double? closedBorderRadius;
   final double? closedElevation;
@@ -191,8 +191,10 @@ class _EditableElementState extends State<EditableElement> {
       return; // error in form input element
     }
     Map<String, dynamic> inputValues = widget.formKey.currentState!.inputValues;
-    if (widget.onSave == null || widget.onSave!(inputValues)) {
+    if (widget.onSave == null) {
       Navigator.pop(context);
+    } else {
+      widget.onSave!(inputValues).then((value) => Navigator.pop(context));
     }
   }
 

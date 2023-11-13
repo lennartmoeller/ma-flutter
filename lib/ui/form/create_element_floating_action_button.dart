@@ -8,7 +8,7 @@ class CreateElementFloatingActionButton extends StatelessWidget {
   final Widget form;
   final GlobalKey<CustomFormState> formKey;
   final String dialogTitle;
-  final bool Function(Map<String, dynamic>)? onSave;
+  final Future<bool> Function(Map<String, dynamic>)? onSave;
   final bool Function(Map<String, dynamic>)? onClose;
 
   const CreateElementFloatingActionButton({
