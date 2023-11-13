@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ma_flutter/ui/form/inputs/form_input.dart';
+import 'package:ma_flutter/ui/form/inputs/text_based_form_input.dart';
 
-class IconFormInput extends FormInput {
+class IconFormInput extends TextBasedFormInput {
   IconFormInput({
     required super.formKey,
     required super.id,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ma_flutter/ui/form/inputs/form_input.dart';
+import 'package:ma_flutter/ui/form/inputs/text_based_form_input.dart';
 
-class TextFormInput extends FormInput {
+class TextFormInput extends TextBasedFormInput {
   TextFormInput({
     required super.formKey,
     required super.id,

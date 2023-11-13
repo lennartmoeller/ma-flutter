@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ma_flutter/ui/form/inputs/form_input.dart';
+import 'package:ma_flutter/ui/form/inputs/text_based_form_input.dart';
 import 'package:ma_flutter/util/euro.dart';
 
-class EuroFormInput extends FormInput {
+class EuroFormInput extends TextBasedFormInput {
   EuroFormInput({
     required super.formKey,
     required super.id,

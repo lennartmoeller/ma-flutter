@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ma_flutter/ui/custom/custom_icon.dart';
 import 'package:ma_flutter/ui/skeleton/navigation_rail_menu_button.dart';
-import 'package:ma_flutter/ui/util/column_with_separator.dart';
+import 'package:ma_flutter/ui/util/row_with_separator.dart';
 import 'package:ma_flutter/util/navigable_page.dart';
 import 'package:ma_flutter/util/skeleton_config.dart';
 import 'package:provider/provider.dart';

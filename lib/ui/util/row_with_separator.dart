@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class RowWithSpacing extends StatelessWidget {
-  final double spacing;
+class RowWithSeparator extends StatelessWidget {
+  final Widget separator;
   final List<Widget> children;
 
-  const RowWithSpacing({
+  const RowWithSeparator({
     super.key,
-    required this.spacing,
+    required this.separator,
     required this.children,
   });
 
@@ -15,7 +15,7 @@ class RowWithSpacing extends StatelessWidget {
     if (children.isEmpty) return Row();
     return Row(
       children: List<Widget>.generate(children.length * 2 - 1, (index) {
-        return index.isEven ? children[index ~/ 2] : SizedBox(width: spacing);
+        return index.isEven ? children[index ~/ 2] : separator;
       }),
     );
   }
