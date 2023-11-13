@@ -37,7 +37,7 @@ class EuroFormInput extends FormInput {
           keyboardType: TextInputType.numberWithOptions(signed: signed, decimal: true),
           controller: TextEditingController(
               text: Euro.toStr(initial, includeEuroSign: false, includeDots: false)),
-          inputFormatters: [EuroFormatter()],
+          inputFormatters: [EuroFormatter(signed: signed)],
         );
 
   @override
@@ -45,6 +45,9 @@ class EuroFormInput extends FormInput {
 }
 
 class EuroFormatter extends TextInputFormatter {
+  bool signed;
+  EuroFormatter({this.signed = true});
+
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // allow empty input as starting point
@@ -55,8 +58,12 @@ class EuroFormatter extends TextInputFormatter {
         .replaceAll('.', ',')
         // disallow all characters except digits, commas, minus
         .replaceAll(RegExp(r'[^0-9,-]'), '');
-    // remove minus signs that are not at the start
-    newText = newText.substring(0, 1) + newText.substring(1).replaceAll('-', '');
+    // remove minus signs
+    if (signed) {
+      newText = newText.substring(0, 1) + newText.substring(1).replaceAll('-', '');
+    } else {
+      newText = newText.replaceAll('-', '');
+    }
     // restore old value if the string is not a valid euro string
     RegExp regex = RegExp(r'^-?(0|[1-9][0-9]*)(,[0-9]{0,2})?$|^-$');
     if (!regex.hasMatch(newText)) return oldValue;

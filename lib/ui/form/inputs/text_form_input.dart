@@ -10,7 +10,7 @@ class TextFormInput extends FormInput {
     super.iconName = "tag",
     super.validator,
     super.onSaved,
-    super.required = true,
+    super.required = false,
   }) : super(controller: TextEditingController(text: initial));
 
   @override

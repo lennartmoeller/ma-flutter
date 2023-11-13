@@ -99,6 +99,7 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
             formKey: _formKey,
             label: "Bezeichnung",
             initial: account?.label ?? "",
+            required: true,
           ),
           EuroFormInput(
             id: "start_balance",
