@@ -5,7 +5,7 @@ import 'package:ma_flutter/ui/form/editable_element.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 
 class CreateElementFloatingActionButton extends StatelessWidget {
-  final Widget form;
+  final Widget Function() formBuilder;
   final GlobalKey<CustomFormState> formKey;
   final String dialogTitle;
   final Future<bool> Function(Map<String, dynamic>)? onSave;
@@ -13,7 +13,7 @@ class CreateElementFloatingActionButton extends StatelessWidget {
 
   const CreateElementFloatingActionButton({
     super.key,
-    required this.form,
+    required this.formBuilder,
     required this.formKey,
     required this.dialogTitle,
     this.onSave,
@@ -48,7 +48,7 @@ class CreateElementFloatingActionButton extends StatelessWidget {
           ),
         ),
         dialogTitle: dialogTitle,
-        form: form,
+        formBuilder: formBuilder,
         formKey: formKey,
         onSave: onSave,
         onClose: onClose,

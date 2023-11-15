@@ -9,7 +9,7 @@ class EditableElement extends StatefulWidget {
 
   final Widget Function(BuildContext, void Function()) closedBuilder;
   final String dialogTitle;
-  final Widget form;
+  final Widget Function() formBuilder;
   final GlobalKey<CustomFormState> formKey;
   final Future<bool> Function(Map<String, dynamic> values)? onSave;
   final bool Function(Map<String, dynamic> values)? onClose;
@@ -20,7 +20,7 @@ class EditableElement extends StatefulWidget {
   const EditableElement({
     required this.closedBuilder,
     required this.dialogTitle,
-    required this.form,
+    required this.formBuilder,
     required this.formKey,
     this.onSave,
     this.onClose,
@@ -135,7 +135,7 @@ class _EditableElementState extends State<EditableElement> {
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: SizedBox(
               width: double.infinity,
-              child: widget.form,
+              child: widget.formBuilder(),
             ),
           ),
         ],
@@ -155,7 +155,7 @@ class _EditableElementState extends State<EditableElement> {
           _getDialogTitle(),
           Padding(
             padding: EdgeInsets.only(top: 16.0),
-            child: widget.form,
+            child: widget.formBuilder(),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24.0),

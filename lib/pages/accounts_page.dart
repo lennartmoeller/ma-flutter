@@ -39,7 +39,7 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
   Widget? get floatingActionButton {
     return MediaQuery.of(context).size.width < EditableElement.maxDialogContainerWidth
         ? CreateElementFloatingActionButton(
-            form: _getForm(),
+            formBuilder: () => _getForm(),
             formKey: _formKey,
             dialogTitle: "Konto erstellen",
             onSave: (values) => _onSave(values: values),
@@ -52,7 +52,7 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
     return MediaQuery.of(context).size.width >= EditableElement.maxDialogContainerWidth
         ? [
             CreateElementTextButton(
-              form: _getForm(),
+              formBuilder: () => _getForm(),
               formKey: _formKey,
               dialogTitle: "Konto erstellen",
               onSave: (values) => _onSave(values: values),
@@ -78,7 +78,7 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
                   onTap: action,
                 ),
                 dialogTitle: "Konto bearbeiten",
-                form: _getForm(account: account),
+                formBuilder: () => _getForm(account: account),
                 formKey: _formKey,
                 onSave: (values) => _onSave(account: account, values: values),
               ),

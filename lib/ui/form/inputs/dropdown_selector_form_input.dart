@@ -11,6 +11,7 @@ class DropdownSelectorFormInput<T> extends StatefulWidget {
   final Map<T, String> options;
   final T? initial;
   final bool required;
+  final void Function(T?)? onSaved;
 
   const DropdownSelectorFormInput({
     super.key,
@@ -21,6 +22,7 @@ class DropdownSelectorFormInput<T> extends StatefulWidget {
     required this.options,
     this.initial,
     this.required = false,
+    this.onSaved,
   });
 
   @override
@@ -40,18 +42,22 @@ class _DropdownSelectorFormInputState<T> extends State<DropdownSelectorFormInput
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return DropdownMenu(
-        label: Text(widget.label),
-        leadingIcon: CustomIcon(name: widget.iconName, style: Style.regular),
-        initialSelection: widget.initial,
-        dropdownMenuEntries: widget.options.entries
-            .map((e) => DropdownMenuEntry(value: e.key, label: e.value))
-            .toList(),
-        width: constraints.maxWidth,
-        onSelected: (value) => {_value = value},
-      );
-    });
+    return DropdownButtonFormField<T>(
+      decoration: InputDecoration(
+        labelText: widget.label,
+        icon: CustomIcon(name: widget.iconName, style: Style.regular),
+      ),
+      value: widget.initial,
+      items: widget.options.entries
+          .map((e) => DropdownMenuItem<T>(value: e.key, child: Text(e.value)))
+          .toList(),
+      onChanged: (value) {
+        _value = value;
+      },
+      onSaved: widget.onSaved,
+      validator: (value) =>
+          widget.required && value == null ? "Dieses Feld ist erforderlich" : null,
+    );
   }
 
   @override

@@ -4,7 +4,7 @@ import 'package:ma_flutter/ui/form/custom_form.dart';
 import 'package:ma_flutter/ui/form/editable_element.dart';
 
 class CreateElementTextButton extends StatelessWidget {
-  final Widget form;
+  final Widget Function() formBuilder;
   final GlobalKey<CustomFormState> formKey;
   final String dialogTitle;
   final Future<bool> Function(Map<String, dynamic>)? onSave;
@@ -12,7 +12,7 @@ class CreateElementTextButton extends StatelessWidget {
 
   const CreateElementTextButton({
     super.key,
-    required this.form,
+    required this.formBuilder,
     required this.formKey,
     required this.dialogTitle,
     this.onSave,
@@ -32,7 +32,7 @@ class CreateElementTextButton extends StatelessWidget {
         label: Text("Hinzufügen"),
       ),
       dialogTitle: dialogTitle,
-      form: form,
+      formBuilder: formBuilder,
       formKey: formKey,
       onSave: onSave,
       onClose: onClose,

@@ -6,15 +6,21 @@ class GermanDate {
   GermanDate(String? str) {
     if (str == null) {
       _dateTime = DateTime.now();
-    } else if (RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(str)) {
-      _dateTime = DateTime.parse(str);
-    } else {
+      return;
+    }
+    if (str.length > 10) {
+      str = str.substring(0, 10);
+    }
+    if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(str)) {
       throw Exception("Invalid date format. Expected 'YYYY-MM-DD'.");
     }
+    _dateTime = DateTime.parse(str);
   }
 
   @override
   String toString() => _dateTime.toIso8601String().substring(0, 10);
+
+  DateTime toDateTime() => _dateTime;
 
   int compareTo(GermanDate other) => _dateTime.compareTo(other._dateTime);
 

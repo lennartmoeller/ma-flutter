@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ma_flutter/model/account.dart';
 import 'package:ma_flutter/model/category.dart';
 import 'package:ma_flutter/model/transaction.dart';
@@ -46,6 +47,15 @@ class FinanceApp extends StatelessWidget {
         darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
         // TODO: Remove this after debugging
         themeMode: ThemeMode.light,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+          const Locale('de'),
+        ],
         home: Skeleton(
           key: skeletonKey,
           pages: [

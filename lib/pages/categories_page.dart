@@ -39,7 +39,7 @@ class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, C
   Widget? get floatingActionButton {
     return MediaQuery.of(context).size.width < EditableElement.maxDialogContainerWidth
         ? CreateElementFloatingActionButton(
-            form: _getForm(),
+            formBuilder: () => _getForm(),
             formKey: _formKey,
             dialogTitle: "Kategorie erstellen",
             onSave: (values) => _onSave(values: values),
@@ -52,7 +52,7 @@ class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, C
     return MediaQuery.of(context).size.width >= EditableElement.maxDialogContainerWidth
         ? [
             CreateElementTextButton(
-              form: _getForm(),
+              formBuilder: () => _getForm(),
               formKey: _formKey,
               dialogTitle: "Kategorie erstellen",
               onSave: (values) => _onSave(values: values),
@@ -78,7 +78,7 @@ class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, C
                   onTap: action,
                 ),
                 dialogTitle: "Kategorie bearbeiten",
-                form: _getForm(category: category),
+                formBuilder: () => _getForm(category: category),
                 formKey: _formKey,
                 onSave: (values) => _onSave(category: category, values: values),
               ),
@@ -122,7 +122,6 @@ class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, C
   }
 
   Future<bool> _onSave({Category? category, required Map<String, dynamic> values}) async {
-    print(values);
     if (category != null) {
       values["id"] = category.id;
     }

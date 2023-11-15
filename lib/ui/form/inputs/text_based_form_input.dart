@@ -11,6 +11,8 @@ abstract class TextBasedFormInput extends TextFormField implements FormInput {
     required String iconName,
     bool required = false,
     String? Function(String?)? validator,
+    super.onTap,
+    super.readOnly,
     super.onSaved,
     super.keyboardType,
     super.controller,

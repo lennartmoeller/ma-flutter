@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:ma_flutter/database/database_helper.dart';
 import 'package:ma_flutter/database/database_row.dart';
-import 'package:ma_flutter/util/german_date.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Transaction extends DatabaseRow {
@@ -11,7 +10,7 @@ class Transaction extends DatabaseRow {
 
   @override
   int id;
-  GermanDate date;
+  String date;
   int account;
   int category;
   String? description;
@@ -35,7 +34,7 @@ class Transaction extends DatabaseRow {
   factory Transaction.fromMap(Map<String, dynamic> map) {
     return Transaction(
       id: map['id'] as int,
-      date: GermanDate(map['date'] as String),
+      date: map['date'] as String,
       account: map['account'] as int,
       category: map['category'] as int,
       description: map['description'] as String,
@@ -57,7 +56,7 @@ class Transaction extends DatabaseRow {
   Map<String, Object?> toMap() {
     return {
       'id': id,
-      'date': date.toString(),
+      'date': date,
       'account': account,
       'category': category,
       'description': description,
