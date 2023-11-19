@@ -15,6 +15,7 @@ class DatabaseHelper {
 
   static Future<Database> _initDatabase() async {
     String dbPath = join(await getDatabasesPath(), _dbName);
+    //databaseFactory.deleteDatabase(dbPath);
     return openDatabase(
       dbPath,
       version: _dbVersion,
@@ -37,7 +38,7 @@ class DatabaseHelper {
       'CREATE TABLE categories(id INTEGER PRIMARY KEY, label TEXT NOT NULL, type INTEGER NOT NULL DEFAULT 2, icon TEXT)',
     );
     await db.execute(
-      'CREATE TABLE transactions(id INTEGER PRIMARY KEY, date TEXT NOT NULL, account INTEGER NOT NULL, category INTEGER NOT NULL, description TEXT, amount INTEGER NOT NULL)',
+      'CREATE TABLE transactions(id INTEGER PRIMARY KEY, date TEXT NOT NULL, account INTEGER NOT NULL, category INTEGER NOT NULL, description TEXT, amount INTEGER NOT NULL, receipt STRING)',
     );
   }
 

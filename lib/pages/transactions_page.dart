@@ -14,6 +14,7 @@ import 'package:ma_flutter/ui/form/editable_element.dart';
 import 'package:ma_flutter/ui/form/inputs/date_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/dropdown_selector_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/euro_form_input.dart';
+import 'package:ma_flutter/ui/form/inputs/image_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/text_form_input.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 import 'package:ma_flutter/util/euro.dart';
@@ -202,6 +203,12 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
             formKey: _formKey,
             label: "Betrag",
             initial: transaction?.amount ?? 0,
+          ),
+          ImageFormInput(
+            id: "receipt",
+            formKey: _formKey,
+            initial: transaction?.receipt,
+            buttonText: "Beleg hinzufügen",
           ),
         ],
       ),

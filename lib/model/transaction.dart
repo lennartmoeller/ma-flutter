@@ -15,6 +15,7 @@ class Transaction extends DatabaseRow {
   int category;
   String? description;
   int amount;
+  String? receipt;
 
   Transaction({
     required this.id,
@@ -23,6 +24,7 @@ class Transaction extends DatabaseRow {
     required this.category,
     this.description,
     required this.amount,
+    this.receipt,
   });
 
   static Future<Map<int, Transaction>> getAll() async {
@@ -39,6 +41,7 @@ class Transaction extends DatabaseRow {
       category: map['category'] as int,
       description: map['description'] as String,
       amount: map['amount'] as int,
+      receipt: map['receipt'] as String?,
     );
   }
 
@@ -50,6 +53,7 @@ class Transaction extends DatabaseRow {
     category = map['category'] ?? category;
     description = map.containsKey('description') ? map['description'] : description;
     amount = map['amount'] ?? amount;
+    receipt = map.containsKey('receipt') ? map['receipt'] : receipt;
   }
 
   @override
@@ -61,6 +65,7 @@ class Transaction extends DatabaseRow {
       'category': category,
       'description': description,
       'amount': amount,
+      'receipt': receipt,
     };
   }
 }

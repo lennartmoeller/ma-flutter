@@ -9,6 +9,7 @@ import 'package:ma_flutter/pages/categories_page.dart';
 import 'package:ma_flutter/pages/transactions_page.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
 import 'package:ma_flutter/ui/theme/color_schemes.dart';
+import 'package:ma_flutter/util/camera_helper.dart';
 import 'package:ma_flutter/util/http_helper.dart';
 import 'package:ma_flutter/util/skeleton_config.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,8 @@ void main() async {
   (data['transactions'] as Map<String, dynamic>).forEach((key, value) {
     Transaction.fromMap(value).insert();
   });
+  // init cameras
+  CameraHelper.initCameras();
 
   runApp(const FinanceApp());
 }
