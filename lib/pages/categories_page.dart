@@ -11,6 +11,7 @@ import 'package:ma_flutter/ui/form/inputs/dropdown_selector_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/icon_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/text_form_input.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
+import 'package:ma_flutter/ui/util/column_with_separator.dart';
 import 'package:ma_flutter/util/http_helper.dart';
 import 'package:ma_flutter/util/navigable_page.dart';
 
@@ -66,14 +67,14 @@ class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, C
     List<Category> categoryList = data.values.toList();
     categoryList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(
-      padding: EdgeInsets.only(bottom: Skeleton.pageBottomPadding),
+      padding: EdgeInsets.only(bottom: SkeletonState.pageBottomPadding),
       children: categoryList
           .mapIndexed((index, category) {
             return [
               EditableElement(
                 closedBuilder: (context, action) => ListTile(
                   title: Text(category.label),
-                  leading: CustomIcon(name: category.icon),
+                  leading: CustomIcon(name: category.icon, style: Style.regular),
                   mouseCursor: SystemMouseCursors.click,
                   onTap: action,
                 ),
@@ -93,7 +94,8 @@ class _CategoriesPageState extends NavigablePageState<CategoriesPage, Map<int, C
   Widget _getForm({Category? category}) {
     return CustomForm(
       key: _formKey,
-      formBuilder: () => Column(
+      formBuilder: () => ColumnWithSeparator(
+        separator: SizedBox(height: 8.0),
         children: [
           DropdownSelectorFormInput(
             formKey: _formKey,

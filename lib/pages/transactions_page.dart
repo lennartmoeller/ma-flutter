@@ -17,6 +17,7 @@ import 'package:ma_flutter/ui/form/inputs/euro_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/image_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/text_form_input.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
+import 'package:ma_flutter/ui/util/column_with_separator.dart';
 import 'package:ma_flutter/util/euro.dart';
 import 'package:ma_flutter/util/german_date.dart';
 import 'package:ma_flutter/util/http_helper.dart';
@@ -27,7 +28,7 @@ class TransactionsPage extends NavigablePage {
   TransactionsPage({super.key, required super.skeletonKey});
 
   @override
-  String get icon => "money-bills";
+  String get icon => "sack-dollar";
 
   @override
   String get title => "Transaktionen";
@@ -86,7 +87,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
     );
 
     return ListView.builder(
-      padding: EdgeInsets.only(bottom: Skeleton.pageBottomPadding),
+      padding: EdgeInsets.only(bottom: SkeletonState.pageBottomPadding),
       itemCount: groupedTransactions.length,
       itemBuilder: (BuildContext context, int index) {
         String date = groupedTransactions.keys.elementAt(index);
@@ -123,7 +124,7 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
                         child: EditableElement(
                           closedBuilder: (context, action) => ListTile(
                             title: Text(category.label),
-                            leading: CustomIcon(name: category.icon),
+                            leading: CustomIcon(name: category.icon, style: Style.regular),
                             subtitle: transaction.description != null &&
                                     transaction.description!.isNotEmpty
                                 ? Text(transaction.description!)
@@ -163,7 +164,8 @@ class _TransactionsPageState extends NavigablePageState<TransactionsPage, List<d
         .map((k, v) => MapEntry(k, v.label));
     return CustomForm(
       key: _formKey,
-      formBuilder: () => Column(
+      formBuilder: () => ColumnWithSeparator(
+        separator: SizedBox(height: 8.0),
         children: [
           DateFormInput(
             formKey: _formKey,

@@ -11,6 +11,7 @@ import 'package:ma_flutter/ui/form/inputs/euro_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/icon_form_input.dart';
 import 'package:ma_flutter/ui/form/inputs/text_form_input.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
+import 'package:ma_flutter/ui/util/column_with_separator.dart';
 import 'package:ma_flutter/util/http_helper.dart';
 import 'package:ma_flutter/util/navigable_page.dart';
 
@@ -66,14 +67,14 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
     List<Account> accountList = data.values.toList();
     accountList.sort((a, b) => a.label.compareTo(b.label));
     return ListView(
-      padding: EdgeInsets.only(bottom: Skeleton.pageBottomPadding),
+      padding: EdgeInsets.only(bottom: SkeletonState.pageBottomPadding),
       children: accountList
           .mapIndexed((index, account) {
             return [
               EditableElement(
                 closedBuilder: (context, action) => ListTile(
                   title: Text(account.label),
-                  leading: CustomIcon(name: account.icon),
+                  leading: CustomIcon(name: account.icon, style: Style.regular),
                   mouseCursor: SystemMouseCursors.click,
                   onTap: action,
                 ),
@@ -93,7 +94,8 @@ class _AccountsPageState extends NavigablePageState<AccountsPage, Map<int, Accou
   Widget _getForm({Account? account}) {
     return CustomForm(
       key: _formKey,
-      formBuilder: () => Column(
+      formBuilder: () => ColumnWithSeparator(
+        separator: SizedBox(height: 8.0),
         children: [
           TextFormInput(
             id: "label",

@@ -42,7 +42,7 @@ class CreateElementFloatingActionButton extends StatelessWidget {
           label: Text("Hinzufügen"),
           icon: CustomIcon(
             name: "plus",
-            size: 18.0,
+            size: 16.0,
             style: Style.regular,
             color: SkeletonState.colorScheme.onPrimaryContainer,
           ),

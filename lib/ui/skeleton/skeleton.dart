@@ -7,9 +7,6 @@ import 'package:ma_flutter/util/skeleton_config.dart';
 import 'package:provider/provider.dart';
 
 class Skeleton extends StatefulWidget {
-  static const double headerHeight = 100.0;
-  static const double pageBottomPadding = 14.0;
-
   final List<NavigablePage> pages;
 
   const Skeleton({super.key, required this.pages});
@@ -19,10 +16,15 @@ class Skeleton extends StatefulWidget {
 }
 
 class SkeletonState extends State<Skeleton> {
-  static const double _compressedSidebarWidth = 80.0;
-  static const double _extendedSidebarWidth = 220.0;
-  static const double _minContentWidth = 500.0;
-  static const double _navItemUnselectedOpacity = 0.55;
+  static const double compressedSidebarWidth = 80.0;
+  static const double extendedSidebarWidth = 220.0;
+  static const double minContentWidth = 500.0;
+  static const double navItemUnselectedOpacity = 0.55;
+  static const double navItemSelectedOpacity = 0.8;
+  static const headerHeightThinDevices = 80.0;
+  static const headerHeightWideDevices = 100.0;
+  static const double pageBottomPadding = 14.0;
+  static const double contentPadding = 16.0;
   static late double statusBarHeight;
   static late ColorScheme colorScheme;
   static late TextTheme textTheme;
@@ -40,7 +42,7 @@ class SkeletonState extends State<Skeleton> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < (_minContentWidth + _compressedSidebarWidth)) {
+        if (constraints.maxWidth < (minContentWidth + compressedSidebarWidth)) {
           return _buildForThinDevices();
         } else {
           return _buildForWideDevices(constraints.maxWidth);
@@ -59,7 +61,7 @@ class SkeletonState extends State<Skeleton> {
       ),
       body: Column(
         children: [
-          _getHeader(menuItem: true),
+          _getHeader(thinDevice: true),
           Expanded(child: widget.pages[config.pageIndex]),
         ],
       ),
@@ -86,15 +88,15 @@ class SkeletonState extends State<Skeleton> {
             leading: NavigationRailMenuButton(onPressed: _openSettings),
             destinations: _getNavigationRailDestinations(),
             elevation: 3.0,
-            extended: deviceWidth >= (_minContentWidth + _extendedSidebarWidth),
-            minExtendedWidth: _extendedSidebarWidth,
+            extended: deviceWidth >= (minContentWidth + extendedSidebarWidth),
+            minExtendedWidth: extendedSidebarWidth,
             onDestinationSelected: config.switchPage,
             unselectedLabelTextStyle: navItemBaseTextStyle.copyWith(
-              color: colorScheme.onSurface.withOpacity(_navItemUnselectedOpacity),
+              color: colorScheme.onSurface.withOpacity(navItemUnselectedOpacity),
             ),
             selectedLabelTextStyle: navItemBaseTextStyle,
-            unselectedIconTheme: iconTheme.copyWith(opacity: _navItemUnselectedOpacity),
-            selectedIconTheme: iconTheme,
+            unselectedIconTheme: iconTheme.copyWith(opacity: navItemUnselectedOpacity),
+            selectedIconTheme: iconTheme.copyWith(opacity: navItemSelectedOpacity),
             selectedIndex: config.pageIndex,
           ),
         ),
@@ -105,7 +107,7 @@ class SkeletonState extends State<Skeleton> {
                 _getHeader(),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: EdgeInsets.symmetric(horizontal: contentPadding),
                     child: widget.pages[config.pageIndex],
                   ),
                 )
@@ -118,18 +120,20 @@ class SkeletonState extends State<Skeleton> {
     );
   }
 
-  Widget _getHeader({bool menuItem = false}) {
-    const double padding = (Skeleton.headerHeight - 52.0) / 4;
+  Widget _getHeader({bool thinDevice = false}) {
+    double headerHeight = thinDevice ? headerHeightThinDevices : headerHeightWideDevices;
+    double paddingItems = (headerHeight - 52.0) / 4;
+    double paddingSides = thinDevice ? paddingItems * 2 : paddingItems + contentPadding;
     double statusBarHeight = MediaQuery.of(context).viewPadding.top;
     return Container(
       color: colorScheme.surface,
-      height: Skeleton.headerHeight + statusBarHeight,
+      height: headerHeight + statusBarHeight,
       width: double.infinity,
-      padding: EdgeInsets.only(top: statusBarHeight, left: padding * 2, right: padding * 2),
+      padding: EdgeInsets.only(top: statusBarHeight, left: paddingSides, right: paddingSides),
       child: RowWithSeparator(
-        separator: SizedBox(width: padding),
+        separator: SizedBox(width: paddingItems),
         children: [
-          if (menuItem)
+          if (thinDevice)
             IconButton(
               icon: CustomIcon(name: "bars"),
               onPressed: _openSettings,
@@ -160,7 +164,7 @@ class SkeletonState extends State<Skeleton> {
       return NavigationDestination(
         icon: CustomIcon(
           name: item.icon,
-          opacity: _navItemUnselectedOpacity,
+          opacity: navItemUnselectedOpacity,
           style: Style.regular,
         ),
         selectedIcon: CustomIcon(name: item.icon, style: Style.solid),

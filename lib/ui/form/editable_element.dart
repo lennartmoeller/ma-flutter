@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ma_flutter/ui/custom/custom_icon.dart';
 import 'package:ma_flutter/ui/form/custom_form.dart';
 import 'package:ma_flutter/ui/skeleton/skeleton.dart';
+import 'package:ma_flutter/ui/util/row_with_separator.dart';
 
 class EditableElement extends StatefulWidget {
   static const double maxDialogContainerWidth = 560.0;
@@ -49,7 +50,8 @@ class _EditableElementState extends State<EditableElement> {
       transitionDuration: Duration(milliseconds: 500),
       closedElevation: widget.closedElevation ?? 0,
       closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(widget.closedBorderRadius ?? 0))),
+        borderRadius: BorderRadius.all(Radius.circular(widget.closedBorderRadius ?? 0)),
+      ),
       closedColor: widget.closedColor ?? SkeletonState.colorScheme.surface,
       closedBuilder: widget.closedBuilder,
       openBuilder: (context, action) => _getThinDeviceDialogContent(),
@@ -105,28 +107,30 @@ class _EditableElementState extends State<EditableElement> {
       padding: EdgeInsets.only(top: SkeletonState.statusBarHeight),
       child: Column(
         children: [
-          SizedBox(
+          Container(
             height: 56.0,
-            child: Row(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: RowWithSeparator(
+              separator: SizedBox(width: 8.0),
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: IconButton(
-                    onPressed: () => _onCloseButtonClick(),
-                    icon: CustomIcon(
-                      name: "xmark",
-                      style: Style.regular,
-                      size: 22.0,
-                    ),
+                IconButton(
+                  onPressed: () => _onCloseButtonClick(),
+                  icon: CustomIcon(
+                    name: "xmark",
+                    style: Style.regular,
+                    size: 22.0,
                   ),
                 ),
-                Expanded(child: _getDialogTitle()),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextButton(
-                    onPressed: () => _onSaveButtonClick(),
-                    child: Text("Speichern"),
+                Expanded(
+                  child: Text(
+                    widget.dialogTitle,
+                    style: SkeletonState.textTheme.titleMedium,
+                    maxLines: 1,
                   ),
+                ),
+                TextButton(
+                  onPressed: () => _onSaveButtonClick(),
+                  child: Text("Speichern"),
                 ),
               ],
             ),
@@ -152,7 +156,11 @@ class _EditableElementState extends State<EditableElement> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _getDialogTitle(),
+          Text(
+            widget.dialogTitle,
+            style: SkeletonState.textTheme.titleLarge,
+            maxLines: 1,
+          ),
           Padding(
             padding: EdgeInsets.only(top: 16.0),
             child: widget.formBuilder(),
@@ -175,14 +183,6 @@ class _EditableElementState extends State<EditableElement> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _getDialogTitle() {
-    return Text(
-      widget.dialogTitle,
-      style: SkeletonState.textTheme.titleLarge,
-      maxLines: 1,
     );
   }
 

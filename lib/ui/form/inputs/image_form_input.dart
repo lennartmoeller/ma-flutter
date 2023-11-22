@@ -78,7 +78,7 @@ class ImageFormInputState extends State<ImageFormInput> implements FormInput {
       children: [
         Image.network(
           HttpHelper.getMediaURL(_filename!),
-          height: 200.0,
+          height: 150.0,
         ),
         Positioned(
           top: 0,

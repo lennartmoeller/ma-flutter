@@ -16,7 +16,7 @@ class NavigationRailMenuButton extends StatelessWidget {
       animation: animation,
       builder: (BuildContext context, Widget? child) {
         return Container(
-          height: Skeleton.headerHeight - 16.0,
+          height: SkeletonState.headerHeightWideDevices - 16.0,
           padding: EdgeInsets.only(right: lerpDouble(0, 140, animation.value)!),
           child: Center(
             child: IconButton(
