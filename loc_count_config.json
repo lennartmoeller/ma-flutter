@@ -1,0 +1,25 @@
+{
+    "count_lines_begin_with": [
+        "import "
+    ],
+    "exclude_dir": [
+        ".git",
+        ".gitignore",
+        ".metadata",
+        "analysis_options.yaml",
+        "android",
+        "font_awesome_flutter",
+        "ios",
+        "linux",
+        "loc_count_config.json",
+        "macos",
+        "pubspec.lock",
+        "README.md",
+        "test",
+        "web",
+        "windows"
+    ],
+    "exclude_filenames": [
+        ".DS_Store"
+    ]
+}
