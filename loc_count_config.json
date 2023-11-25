@@ -10,6 +10,8 @@
         "android",
         "font_awesome_flutter",
         "ios",
+        "lib/theme",
+        "lib/ui/theme",
         "linux",
         "loc_count_config.json",
         "macos",
